@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>console</headerType>
+  <jar>C:\Users\user\Documents\userN\BlindBrowser v2.0 - Maven\target\BlindBrowser-standalone.jar</jar>
+  <outfile>C:\Users\user\Documents\userN\BlindBrowser v2.0 - Maven\BlindBrowser.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl></downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>true</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\Users\user\Documents\userN\Icon\icon.ico</icon>
+  <classPath>
+    <mainClass>meuparser.BlindBrowser</mainClass>
+  </classPath>
+  <jre>
+    <path>C:\Program Files\Java\jdk-17</path>
+    <requiresJdk>false</requiresJdk>
+    <requires64Bit>true</requires64Bit>
+    <minVersion>17.0.0</minVersion>
+    <maxVersion></maxVersion>
+  </jre>
+  <versionInfo>
+    <fileVersion>1.5.0.0</fileVersion>
+    <txtFileVersion>Sistema de navegacao assistiva</txtFileVersion>
+    <fileDescription>BlindBrowser - Navegador Acessível</fileDescription>
+    <copyright>2025 EESC-USP</copyright>
+    <productVersion>1.5.0.0</productVersion>
+    <txtProductVersion>Sistema de navegacao assistiva</txtProductVersion>
+    <productName>BlindBrowser</productName>
+    <companyName>EESC-USP</companyName>
+    <internalName>BlindBrowser (BB)</internalName>
+    <originalFilename>BlindBrowser.exe</originalFilename>
+    <trademarks></trademarks>
+    <language>PORTUGUESE_BRAZIL</language>
+  </versionInfo>
+</launch4jConfig>

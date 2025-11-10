@@ -1,0 +1,29 @@
+# Maven
+target/
+dependency-reduced-pom.xml
+*.log
+
+# IntelliJ / IDEA
+.idea/
+*.iml
+out/
+
+# SO / diversos
+.DS_Store
+Thumbs.db
+*.class
+
+# JARs gerados
+BlindBrowser-standalone.jar
+*.jar
+
+# SVN legado
+.svn/
+src/.svn/
+
+# Binaries / artefatos
+*.exe
+*.zip
+*.jar
+target/
+dependency-reduced-pom.xml

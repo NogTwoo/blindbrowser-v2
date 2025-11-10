@@ -1,0 +1,33 @@
+READ.ME
+
+# BlindBrowser - Métodos de extração de texto
+
+## Acesso ao projeto
+
+Abra o projeto através de uma IDE que reconheça e ofereça suporte à linguagem Java(recomendo fortemente o IntelliJ).
+Seguindo o caminho a seguir "rc\main\java\meuparser", o usuário com a estrutura padrão do projeto. Nela, conterá os
+arquivos MeuParser(algoritmo mais "simples" e autoral) e o Jsoup(Biblioteca contendo algoritmos de reconhecimento de CSS
+e extração robusta de HTML5). Atualmente, o Jsoup está sendo o método utilizado.
+
+### Principais mudanças
+
+O software foi reestruturado para o padrão Maven, para obtermos um padrão que nos fornece um 
+melhor gerenciamento do projeto. A interface continua praticamente a mesma, as mudanças 
+são notadas após a inserção do link e a execução do software, no qual, a extração é feita
+de forma eficaz e perceptível usando métodos que a biblioteca Jsoup oferece. Dentre as mudanças feitas foram:
+
+- Reestruturação do projeto para o padrão Maven;
+
+- Implementação dos algoritmos especializados(WikipediaIntegrator, UolParserIntegrator, AIStats, etc) e da 
+biblioteca Jsoup(biblioteca que contém métodos para a extração de textos relevantes de páginas robustas HTML).
+
+- Atualização do método de comunicação via Porta Serial, sendo acrescentado a biblioteca JSerialComm. 
+Como a biblioteca RXTX possui uma aplicação ultrapassada devido a novos algoritmos de comunicação, 
+a biblioteca JSerialComm foi implementada.
+
+
+
+#### Referências 
+
+https://fazecast.github.io/jSerialComm/
+https://jsoup.org/

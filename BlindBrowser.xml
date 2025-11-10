@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Users\user\Documents\userN\BlindBrowser v2.0 - Maven\target\blindbrowser-v1.5-2.0-SNAPSHOT.jar</jar>
+  <outfile>C:\Users\user\Documents\userN\BlindBrowser v2.0 - Maven\BlindBrowser.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir></chdir>
+  <priority>normal</priority>
+  <downloadUrl></downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\Users\user\Documents\userN\Icon\icon.ico</icon>
+  <classPath>
+    <mainClass>meuparser.BlindBrowser</mainClass>
+    <cp>C:\Users\user\Documents\userN\BlindBrowser v2.0 - Maven\target\blindbrowser-v1.5-2.0-SNAPSHOT.jar </cp>
+  </classPath>
+  <jre>
+    <path>C:\Program Files\Java\jdk-17</path>
+    <requiresJdk>false</requiresJdk>
+    <requires64Bit>false</requires64Bit>
+    <minVersion>15</minVersion>
+    <maxVersion></maxVersion>
+  </jre>
+</launch4jConfig>
