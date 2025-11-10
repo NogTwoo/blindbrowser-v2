@@ -17,7 +17,7 @@ java -jar target/BlindBrowser-standalone.jar
 
 - Terminal (PuTTY): COM4, 9600
 
-- Digite a no terminal → BlindBrowser envia conteúdo.
+- Digite "a" no terminal → BlindBrowser envia conteúdo.
 
 ## REQUISITOS
 
