@@ -3,8 +3,8 @@ package meuparser.pipelines;
 import java.util.*;
 
 /**
- * Runner configurã¡vel para testes personalizados
- * Permite ajustar parã¢metros especã­ficos para diferentes cenã¡rios
+ * Runner configurável para testes personalizados
+ * Permite ajustar parâmetros específicos para diferentes cenários
  */
 public class ConfigurableTestRunner {
 
@@ -18,14 +18,14 @@ public class ConfigurableTestRunner {
         public boolean verboseOutput = true;
         public String outputPrefix = "test_results";
 
-        // Parã¢metros especã­ficos do BlindBrowser
+        // Parâmetros específicos do BlindBrowser
         public int parseTimeout = 10000; // ms
         public boolean enableCache = true;
         public boolean measureMemoryUsage = false;
     }
 
     public static void main(String[] args) {
-        // Configuraã§ã£o rã¡pida para relatã³rio
+        // Configuração rápida para relatório
         ConfigurableTestRunner runner = new ConfigurableTestRunner();
 
         TestConfiguration quickConfig = new TestConfiguration();
@@ -41,21 +41,21 @@ public class ConfigurableTestRunner {
     }
 
     /**
-     * Executa teste com configuraã§ã£o personalizada
+     * Executa teste com configuração personalizada
      */
     public List<PerformanceProfiler.ProcessingMetrics> runConfigurableTest(TestConfiguration config) {
-        System.out.println("âš™ï¸ TESTE CONFIGURãVEL BLINDBROWSER");
-        System.out.println("â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•");
-        System.out.printf("URLs: %d | Iteraã§ãµes: %d | Delay: %dms\n",
+        System.out.println("🛠 TESTE CONFIGURÁVEL BLINDBROWSER");
+        System.out.println("=================================");
+        System.out.printf("URLs: %d | Iteraçãµes: %d | Delay: %dms\n",
                 config.testUrls.length, config.iterations, config.delayBetweenTests);
-        System.out.println("â•".repeat(40));
+        System.out.println("=".repeat(40));
 
         List<PerformanceProfiler.ProcessingMetrics> allResults = new ArrayList<>();
         PerformanceProfiler profiler = new PerformanceProfiler();
 
         for (int iteration = 1; iteration <= config.iterations; iteration++) {
             if (config.verboseOutput) {
-                System.out.printf("\nðŸ”„ ITERAã‡ãƒO %d/%d\n", iteration, config.iterations);
+                System.out.printf("\n📄 ITERAÇÃO %d/%d\n", iteration, config.iterations);
                 System.out.println("-".repeat(30));
             }
 
@@ -63,10 +63,10 @@ public class ConfigurableTestRunner {
                     profiler.runBenchmark(config.testUrls);
             allResults.addAll(iterationResults);
 
-            // Delay entre iteraã§ãµes se configurado
+            // Delay entre iteraçãµes se configurado
             if (config.delayBetweenTests > 0 && iteration < config.iterations) {
                 if (config.verboseOutput) {
-                    System.out.printf("â±ï¸ Aguardando %dms...\n", config.delayBetweenTests);
+                    System.out.printf("⏱️ Aguardando %dms...\n", config.delayBetweenTests);
                 }
                 try {
                     Thread.sleep(config.delayBetweenTests);
@@ -82,17 +82,17 @@ public class ConfigurableTestRunner {
             exportResults(allResults, config);
         }
 
-        // Relatã³rio de consolidaã§ã£o
+        // Relatório de consolidação
         generateConsolidatedReport(allResults, config);
 
         return allResults;
     }
 
     /**
-     * Exporta resultados baseado na configuraã§ã£o
+     * Exporta resultados baseado na configuração
      */
     private void exportResults(List<PerformanceProfiler.ProcessingMetrics> results, TestConfiguration config) {
-        System.out.println("\nðŸ“¤ EXPORTANDO RESULTADOS...");
+        System.out.println("\n📤 EXPORTANDO RESULTADOS...");
 
         MetricsCollector collector = new MetricsCollector();
         MetricsCollector.SystemMetrics aggregated = collector.aggregateMetrics(results);
@@ -113,41 +113,41 @@ public class ConfigurableTestRunner {
         String csvFile = config.outputPrefix + "_dados.csv";
         exporter.exportToCSV(results, csvFile);
 
-        System.out.println("âœ… Exportaã§ã£o concluã­da!");
+        System.out.println("✅ Exportação concluída!");
     }
 
     /**
-     * Gera relatã³rio consolidado personalizado
+     * Gera relatório consolidado personalizado
      */
     private void generateConsolidatedReport(List<PerformanceProfiler.ProcessingMetrics> results,
                                             TestConfiguration config) {
-        System.out.println("\nðŸ“Š RELATã“RIO CONSOLIDADO");
-        System.out.println("â•".repeat(40));
+        System.out.println("\n📊 RELATÓRIO CONSOLIDADO");
+        System.out.println("=".repeat(40));
 
         List<PerformanceProfiler.ProcessingMetrics> successResults = results.stream()
                 .filter(m -> m.success)
                 .toList();
 
         if (successResults.isEmpty()) {
-            System.out.println("âŒ Nenhum resultado bem-sucedido!");
+            System.out.println("❌ Nenhum resultado bem-sucedido!");
             return;
         }
 
-        // Estatã­sticas gerais
+        // Estatísticas gerais
         double avgE2E = successResults.stream().mapToLong(m -> m.totalTime).average().orElse(0);
         double avgRRR = successResults.stream().mapToDouble(m -> m.noiseReductionRatio).average().orElse(0);
         double avgCR = successResults.stream().mapToDouble(m -> m.compressionRatio).average().orElse(0);
         double successRate = (double) successResults.size() / results.size();
 
-        System.out.printf("ðŸŽ¯ Mã‰TRICAS PRINCIPAIS:\n");
+        System.out.printf("🎯 MÉTRICAS PRINCIPAIS:\n");
         System.out.printf("- Taxa de sucesso: %.1f%% (%d/%d)\n",
                 successRate * 100, successResults.size(), results.size());
-        System.out.printf("- Tempo mã©dio end-to-end: %.1f ms\n", avgE2E);
-        System.out.printf("- Reduã§ã£o mã©dia de ruã­do: %.1f%%\n", avgRRR * 100);
-        System.out.printf("- Taxa de compressã£o: %.3f\n", avgCR);
+        System.out.printf("- Tempo médio end-to-end: %.1f ms\n", avgE2E);
+        System.out.printf("- Redução média de ruído: %.1f%%\n", avgRRR * 100);
+        System.out.printf("- Taxa de compressão: %.3f\n", avgCR);
 
-        // Anã¡lise por site
-        System.out.println("\nðŸ“ˆ ANãLISE POR SITE:");
+        // Análise por site
+        System.out.println("\n📈ANÁLISE POR SITE:");
         Map<String, List<PerformanceProfiler.ProcessingMetrics>> bySite = new HashMap<>();
         successResults.forEach(m -> bySite.computeIfAbsent(m.siteName, k -> new ArrayList<>()).add(m));
 
@@ -158,27 +158,27 @@ public class ConfigurableTestRunner {
                     site, siteAvgTime, siteAvgRRR, siteResults.size());
         });
 
-        // Dados para inserir no relatã³rio LaTeX
-        System.out.println("\nðŸ“ DADOS PARA RELATã“RIO LATEX:");
+        // Dados para inserir no relatório LaTeX
+        System.out.println("\nðŸ“ DADOS PARA RELATÓRIO LATEX:");
         System.out.println("\\begin{itemize}");
-        System.out.printf("\\item Tempo mã©dio de processamento: %.0f ms\n", avgE2E);
-        System.out.printf("\\item Reduã§ã£o mã©dia de ruã­do: %.1f\\%%\n", avgRRR * 100);
-        System.out.printf("\\item Taxa de compressã£o: %.3f\n", avgCR);
+        System.out.printf("\\item Tempo médio de processamento: %.0f ms\n", avgE2E);
+        System.out.printf("\\item Redução média de ruído: %.1f\\%%\n", avgRRR * 100);
+        System.out.printf("\\item Taxa de compressão: %.3f\n", avgCR);
         System.out.printf("\\item Confiabilidade do sistema: %.1f\\%%\n", successRate * 100);
         System.out.println("\\end{itemize}");
 
-        System.out.println("\nðŸŽ‰ Relatã³rio consolidado gerado com sucesso!");
+        System.out.println("\n🎉 Relatório consolidado gerado com sucesso!");
     }
 
     /**
-     * Configuraã§ãµes prã©-definidas para diferentes cenã¡rios
+     * Configuraçãµes pré-definidas para diferentes cenários
      */
     public static class PresetConfigurations {
 
         public static TestConfiguration quickTest() {
             TestConfiguration config = new TestConfiguration();
             config.testUrls = new String[]{
-                    "https://pt.wikipedia.org/wiki/Java_(linguagem_de_programaã§ã£o)"
+                    "https://pt.wikipedia.org/wiki/Java_(linguagem_de_programação)"
             };
             config.iterations = 1;
             config.outputPrefix = "quick_test";
@@ -205,7 +205,7 @@ public class ConfigurableTestRunner {
         public static TestConfiguration stressTest() {
             TestConfiguration config = new TestConfiguration();
             config.testUrls = new String[]{
-                    "https://pt.wikipedia.org/wiki/Java_(linguagem_de_programaã§ã£o)",
+                    "https://pt.wikipedia.org/wiki/Java_(linguagem_de_programação)",
                     "https://brasilescola.uol.com.br/informatica/"
             };
             config.iterations = 10;

@@ -5,32 +5,32 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Coletor centralizado de mã©tricas do sistema BlindBrowser
- * Agrega dados de performance, precisã£o e qualidade de extraã§ã£o
+ * Coletor centralizado de métricas do sistema BlindBrowser
+ * Agrega dados de performance, precisão e qualidade de extração
  */
 public class MetricsCollector {
 
     public static class SystemMetrics {
-        // Mã©tricas de Performance
+        // Métricas de Performance
         public double avgParseTime;
         public double avgClassificationTime;
         public double avgSummarizationTime;
         public double avgFormattingTime;
         public double avgEndToEndTime;
 
-        // Mã©tricas de Qualidade
+        // Métricas de Qualidade
         public double avgNoiseReduction;
         public double avgCompressionRatio;
         public double avgPrecision;
         public double avgRecall;
         public double avgF1Score;
 
-        // Mã©tricas de Conteãºdo
+        // Métricas de Conteãºdo
         public double avgOriginalTokens;
         public double avgFinalTokens;
         public double avgKeywordCoverage;
 
-        // Estatã­sticas Gerais
+        // Estatísticas Gerais
         public int totalTests;
         public int successfulTests;
         public double successRate;
@@ -42,7 +42,7 @@ public class MetricsCollector {
     }
 
     /**
-     * Agrega mã©tricas de mãºltiplos testes de performance
+     * Agrega métricas de mãºltiplos testes de performance
      */
     public SystemMetrics aggregateMetrics(List<PerformanceProfiler.ProcessingMetrics> performanceData) {
         SystemMetrics metrics = new SystemMetrics();
@@ -62,10 +62,10 @@ public class MetricsCollector {
                 .collect(Collectors.toList());
 
         if (successfulTests.isEmpty()) {
-            return metrics; // Retorna mã©tricas vazias se nã£o hã¡ testes bem-sucedidos
+            return metrics; // Retorna métricas vazias se não hã¡ testes bem-sucedidos
         }
 
-        // Calcula mã©dias de performance
+        // Calcula médias de performance
         metrics.avgParseTime = successfulTests.stream()
                 .mapToLong(m -> m.parseTime)
                 .average()
@@ -91,7 +91,7 @@ public class MetricsCollector {
                 .average()
                 .orElse(0.0);
 
-        // Calcula mã©tricas de qualidade
+        // Calcula métricas de qualidade
         metrics.avgNoiseReduction = successfulTests.stream()
                 .mapToDouble(m -> m.noiseReductionRatio)
                 .average()
@@ -102,7 +102,7 @@ public class MetricsCollector {
                 .average()
                 .orElse(0.0);
 
-        // Mã©tricas de conteãºdo
+        // Métricas de conteãºdo
         metrics.avgOriginalTokens = successfulTests.stream()
                 .mapToInt(m -> m.originalTokens)
                 .average()
@@ -117,7 +117,7 @@ public class MetricsCollector {
     }
 
     /**
-     * Calcula mã©tricas de precisã£o e recall baseadas em ground truth
+     * Calcula métricas de precisão e recall baseadas em ground truth
      */
     public PrecisionRecallMetrics calculatePrecisionRecall(List<GroundTruthSample> groundTruth,
                                                            List<ExtractionResult> results) {
@@ -147,7 +147,7 @@ public class MetricsCollector {
             Set<String> falseNegatives = new HashSet<>(trueContent);
             falseNegatives.removeAll(extractedContent);
 
-            // Precisã£o e Recall para esta amostra
+            // Precisão e Recall para esta amostra
             double precision = truePositives.isEmpty() ? 0.0 :
                     (double) truePositives.size() / (truePositives.size() + falsePositives.size());
             double recall = truePositives.isEmpty() ? 0.0 :
@@ -166,38 +166,38 @@ public class MetricsCollector {
     }
 
     /**
-     * Gera relatã³rio completo das mã©tricas
+     * Gera relatã³rio completo das métricas
      */
     public void generateMetricsReport(SystemMetrics metrics) {
-        System.out.println("\nðŸ“Š RELATã“RIO COMPLETO DE Mã‰TRICAS");
+        System.out.println("\nðŸ“Š RELATã“RIO COMPLETO DE MÉTRICAS");
         System.out.println("â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•");
 
-        // Seã§ã£o de Performance
-        System.out.println("\nðŸš€ Mã‰TRICAS DE PERFORMANCE:");
-        System.out.printf("- Parse mã©dio: %.1f ms\n", metrics.avgParseTime);
-        System.out.printf("- Classificaã§ã£o mã©dia: %.1f ms\n", metrics.avgClassificationTime);
-        System.out.printf("- Sumarizaã§ã£o mã©dia: %.1f ms\n", metrics.avgSummarizationTime);
-        System.out.printf("- Formataã§ã£o mã©dia: %.1f ms\n", metrics.avgFormattingTime);
-        System.out.printf("- Tempo total mã©dio: %.1f ms\n", metrics.avgEndToEndTime);
+        // Seção de Performance
+        System.out.println("\nðŸš€ MÉTRICAS DE PERFORMANCE:");
+        System.out.printf("- Parse médio: %.1f ms\n", metrics.avgParseTime);
+        System.out.printf("- Classificação média: %.1f ms\n", metrics.avgClassificationTime);
+        System.out.printf("- Sumarização média: %.1f ms\n", metrics.avgSummarizationTime);
+        System.out.printf("- Formatação média: %.1f ms\n", metrics.avgFormattingTime);
+        System.out.printf("- Tempo total médio: %.1f ms\n", metrics.avgEndToEndTime);
 
-        // Seã§ã£o de Qualidade
-        System.out.println("\nâœ¨ Mã‰TRICAS DE QUALIDADE:");
-        System.out.printf("- Reduã§ã£o de ruã­do: %.3f (%.1f%%)\n",
+        // Seção de Qualidade
+        System.out.println("\nâœ¨ MÉTRICAS DE QUALIDADE:");
+        System.out.printf("- Redução de ruído: %.3f (%.1f%%)\n",
                 metrics.avgNoiseReduction, metrics.avgNoiseReduction * 100);
-        System.out.printf("- Taxa de compressã£o: %.3f\n", metrics.avgCompressionRatio);
-        System.out.printf("- Precisã£o mã©dia: %.3f\n", metrics.avgPrecision);
-        System.out.printf("- Recall mã©dio: %.3f\n", metrics.avgRecall);
-        System.out.printf("- F1-Score mã©dio: %.3f\n", metrics.avgF1Score);
+        System.out.printf("- Taxa de compressão: %.3f\n", metrics.avgCompressionRatio);
+        System.out.printf("- Precisão média: %.3f\n", metrics.avgPrecision);
+        System.out.printf("- Recall médio: %.3f\n", metrics.avgRecall);
+        System.out.printf("- F1-Score médio: %.3f\n", metrics.avgF1Score);
 
-        // Seã§ã£o de Conteãºdo
-        System.out.println("\nðŸ“ Mã‰TRICAS DE CONTEãšDO:");
-        System.out.printf("- Tokens originais mã©dios: %.0f\n", metrics.avgOriginalTokens);
-        System.out.printf("- Tokens finais mã©dios: %.0f\n", metrics.avgFinalTokens);
-        System.out.printf("- Reduã§ã£o mã©dia de tokens: %.0f\n",
+        // Seção de Conteãºdo
+        System.out.println("\nðŸ“ MÉTRICAS DE CONTEÚDO:");
+        System.out.printf("- Tokens originais médios: %.0f\n", metrics.avgOriginalTokens);
+        System.out.printf("- Tokens finais médios: %.0f\n", metrics.avgFinalTokens);
+        System.out.printf("- Redução média de tokens: %.0f\n",
                 metrics.avgOriginalTokens - metrics.avgFinalTokens);
 
-        // Seã§ã£o de Confiabilidade
-        System.out.println("\nðŸŽ¯ CONFIABILIDADE DO SISTEMA:");
+        // Seção de Confiabilidade
+        System.out.println("\n🎯 CONFIABILIDADE DO SISTEMA:");
         System.out.printf("- Total de testes: %d\n", metrics.totalTests);
         System.out.printf("- Testes bem-sucedidos: %d\n", metrics.successfulTests);
         System.out.printf("- Taxa de sucesso: %.1f%%\n", metrics.successRate * 100);

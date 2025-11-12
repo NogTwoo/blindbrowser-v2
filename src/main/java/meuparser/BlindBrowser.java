@@ -151,7 +151,7 @@ public class BlindBrowser extends JFrame implements Runnable {
      * NOVO: Inicializa o indicador de modo na interface
      */
     private void initializeModeIndicator() {
-        modeIndicatorLabel = new JLabel("ðŸ“„ Modo: RESUMIDO");
+        modeIndicatorLabel = new JLabel("📄 Modo: RESUMIDO");
         modeIndicatorLabel.setFont(new Font("Arial", Font.BOLD, 12));
         modeIndicatorLabel.setOpaque(true);
         modeIndicatorLabel.setBackground(new Color(200, 255, 200));
@@ -998,7 +998,7 @@ public class BlindBrowser extends JFrame implements Runnable {
         if (ttsManager != null) {
             try {
                 ttsManager.selectVoice();
-                updateNarrationStatus("🎙️¸ Configuração de voz alterada");
+                updateNarrationStatus("🎙️ - Configuração de voz alterada");
             } catch (Exception e) {
                 System.err.println("⚠️ Erro ao selecionar voz: " + e.getMessage());
                 updateNarrationStatus("⚠️ Erro na seleção de voz");
@@ -1019,7 +1019,7 @@ public class BlindBrowser extends JFrame implements Runnable {
                 statusLabel.setText(message);
                 statusLabel.repaint();
             }
-            System.out.println("ðŸ“Š Status: " + message);
+            System.out.println("📊 Status: " + message);
         });
     }
 
@@ -1057,7 +1057,7 @@ public class BlindBrowser extends JFrame implements Runnable {
     private void testCurrentVoice() {
         if (ttsManager != null) {
             try {
-                updateNarrationStatus("ðŸŽµ Testando voz atual...");
+                updateNarrationStatus("🎵 Testando voz atual...");
                 ttsManager.testCurrentVoice();
             } catch (Exception e) {
                 System.err.println("⚠️ Erro ao testar voz: " + e.getMessage());
@@ -1072,7 +1072,7 @@ public class BlindBrowser extends JFrame implements Runnable {
     }
 
     /**
-     * NOVO: Menu rã¡pido de opçãµes de voz
+     * NOVO: Menu rápido de opções de voz
      */
     private void showVoiceQuickMenu() {
         if (ttsManager == null) {
@@ -1110,7 +1110,7 @@ public class BlindBrowser extends JFrame implements Runnable {
     }
 
     /**
-     * NOVO: Mostra instruçãµes para instalar Edge TTS (voz mais natural)
+     * NOVO: Mostra instruções para instalar Edge TTS (voz mais natural)
      */
     private void showEdgeTTSInstallation() {
         String instructions = """
@@ -1222,12 +1222,12 @@ public class BlindBrowser extends JFrame implements Runnable {
             }
 
             /**
-             * Para a narraçãoH
+             * Para a narração
              */
             private void stopNarration() {
                 if (ttsManager != null) {
                     ttsManager.stopNarration();
-                    statusLabel.setText("â¹ï¸ Narração parada");
+                    statusLabel.setText("⏹️ Narração parada");
                 }
             }
 

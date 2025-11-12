@@ -10,8 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import meuparser.cache.ContentComparator.ComparisonResult;
 
 /**
- * Sistema de cache para conteãºdo web extraã­do
- * Thread-safe e com limpeza automã¡tica de itens expirados
+ * Sistema de cache para conteúdo web extraído
+ * Thread-safe e com limpeza automática de itens expirados
  */
 public class ContentCache {
     private final Map<String, CachedContent> cache = new ConcurrentHashMap<>();
@@ -23,7 +23,7 @@ public class ContentCache {
     private final List<ComparisonResult> comparisonHistory = new ArrayList<>();
 
     /**
-     * Construtor com valores padrã£o
+     * Construtor com valores padrão
      */
     public ContentCache() {
         this.maxSize = 100;
@@ -31,9 +31,9 @@ public class ContentCache {
     }
 
     /**
-     * Construtor com configuraã§ãµes customizadas
-     * @param maxSize Tamanho mã¡ximo do cache
-     * @param defaultTtlMillis TTL padrã£o em milissegundos
+     * Construtor com configurações customizadas
+     * @param maxSize Tamanho máximo do cache
+     * @param defaultTtlMillis TTL padrão em milissegundos
      */
     public ContentCache(int maxSize, long defaultTtlMillis) {
         this.maxSize = maxSize;
@@ -41,9 +41,9 @@ public class ContentCache {
     }
 
     /**
-     * Obtã©m conteãºdo do cache se existir e nã£o estiver expirado
-     * @param url A URL do conteãºdo
-     * @return O conteãºdo se disponã­vel, vazio caso contrã¡rio
+     * Obtém conteúdo do cache se existir e não estiver expirado
+     * @param url A URL do conteúdo
+     * @return O conteúdo se disponível, vazio caso contrário
      */
     public Optional<String> get(String url) {
         if (url == null || url.trim().isEmpty()) {
@@ -70,9 +70,9 @@ public class ContentCache {
     }
 
     /**
-     * Armazena conteãºdo no cache
-     * @param url A URL do conteãºdo
-     * @param content O conteãºdo a ser armazenado
+     * Armazena conteúdo no cache
+     * @param url A URL do conteúdo
+     * @param content O conteúdo a ser armazenado
      */
     public void put(String url, String content) {
         if (url == null || url.trim().isEmpty() || content == null) {
@@ -156,7 +156,7 @@ public class ContentCache {
             normalized = normalized.substring(0, normalized.length() - 1);
         }
 
-        // Converter para minãºsculas para comparaã§ã£o case-insensitive
+        // Converter para minúsculas para comparação case-insensitive
         return normalized.toLowerCase();
     }
 
@@ -169,20 +169,20 @@ public class ContentCache {
     }
 
     /**
-     * Verifica se uma URL estã¡ no cache
+     * Verifica se uma URL está no cache
      * @param url A URL a verificar
-     * @return true se estiver em cache e nã£o expirado
+     * @return true se estiver em cache e não expirado
      */
     public boolean contains(String url) {
         return get(url).isPresent();
     }
 
     /**
-     * Obtã©m estatã­sticas do cache
-     * @return Objeto com estatã­sticas do cache
+     * Obtém estatísticas do cache
+     * @return Objeto com estatísticas do cache
      */
     public CacheStats getStats() {
-        cleanExpiredEntries(); // Limpar antes de calcular estatã­sticas
+        cleanExpiredEntries(); // Limpar antes de calcular estatísticas
 
         return new CacheStats(
                 cache.size(),
@@ -193,7 +193,7 @@ public class ContentCache {
     }
 
     /**
-     * Calcula o tamanho total do conteãºdo em cache
+     * Calcula o tamanho total do conteúdo em cache
      */
     private long calculateTotalContentSize() {
         return cache.values().stream()
@@ -202,7 +202,7 @@ public class ContentCache {
     }
 
     /**
-     * Conta quantos itens estã£o expirados
+     * Conta quantos itens estão expirados
      */
     private int countExpiredEntries() {
         return (int) cache.values().stream()
@@ -210,37 +210,37 @@ public class ContentCache {
                 .sum();
     }
 
-    // Adicione estes mã©todos ã  classe ContentCache
+    // Adicione estes métodos ã  classe ContentCache
 
     /**
-     * Habilita/desabilita comparaã§ã£o entre cache e conteãºdo fresco
-     * @param enable true para habilitar comparaã§ã£o
+     * Habilita/desabilita comparação entre cache e conteúdo fresco
+     * @param enable true para habilitar comparação
      */
     public void setComparisonEnabled(boolean enable) {
         this.enableComparison = enable;
-        System.out.println("Comparaã§ã£o de cache " + (enable ? "HABILITADA" : "DESABILITADA"));
+        System.out.println("Comparação de cache " + (enable ? "HABILITADA" : "DESABILITADA"));
     }
 
     /**
-     * Obtã©m conteãºdo com opã§ã£o de comparar com conteãºdo fresco
-     * @param url A URL do conteãºdo
-     * @param freshContentProvider Funã§ã£o que fornece conteãºdo fresco se necessã¡rio para comparaã§ã£o
-     * @return O conteãºdo se disponã­vel, vazio caso contrã¡rio
+     * Obtém conteúdo com opção de comparar com conteúdo fresco
+     * @param url A URL do conteúdo
+     * @param freshContentProvider Função que fornece conteúdo fresco se necessário para comparação
+     * @return O conteúdo se disponível, vazio caso contrário
      */
     public Optional<String> getWithComparison(String url, java.util.function.Supplier<String> freshContentProvider) {
         Optional<String> cachedResult = get(url);
 
         if (cachedResult.isPresent() && enableComparison && freshContentProvider != null) {
-            // Executar comparaã§ã£o em background para nã£o atrasar a resposta
+            // Executar comparação em background para não atrasar a resposta
             new Thread(() -> {
                 try {
-                    System.out.println("Iniciando comparaã§ã£o cache vs site para: " + url);
+                    System.out.println("Iniciando comparação cache vs site para: " + url);
                     String freshContent = freshContentProvider.get();
 
                     ComparisonResult comparison = ContentComparator.compare(url, freshContent, cachedResult.get());
                     comparisonHistory.add(comparison);
 
-                    // Manter apenas as ãºltimas 10 comparaã§ãµes
+                    // Manter apenas as últimas 10 comparações
                     if (comparisonHistory.size() > 10) {
                         comparisonHistory.remove(0);
                     }
@@ -248,13 +248,13 @@ public class ContentCache {
                     String comparisonLog = ContentComparator.generateComparisonLog(comparison);
                     System.out.println(comparisonLog);
 
-                    // Se hã¡ diferenã§as significativas, alertar
+                    // Se há diferenças significativas, alertar
                     if (comparison.hasSignificantDifferences()) {
-                        System.out.println("âš ï¸  ALERTA: Diferenã§as significativas detectadas entre cache e conteãºdo atual!");
+                        System.out.println("⚠ ALERTA: Diferenças significativas detectadas entre cache e conteúdo atual!");
                     }
 
                 } catch (Exception e) {
-                    System.err.println("Erro durante comparaã§ã£o: " + e.getMessage());
+                    System.err.println("Erro durante comparação: " + e.getMessage());
                 }
             }, "ContentComparison-" + System.currentTimeMillis()).start();
         }
@@ -263,26 +263,26 @@ public class ContentCache {
     }
 
     /**
-     * Obtã©m histã³rico de comparaã§ãµes realizadas
-     * @return Lista com resultados das ãºltimas comparaã§ãµes
+     * Obtém histórico de comparações realizadas
+     * @return Lista com resultados das últimas comparações
      */
     public List<ComparisonResult> getComparisonHistory() {
         return new ArrayList<>(comparisonHistory);
     }
 
     /**
-     * Gera relatã³rio resumido das comparaã§ãµes
-     * @return Relatã³rio das comparaã§ãµes realizadas
+     * Gera relatório resumido das comparações
+     * @return Relatório das comparações realizadas
      */
     public String getComparisonReport() {
         if (comparisonHistory.isEmpty()) {
-            return "Nenhuma comparaã§ã£o realizada ainda.";
+            return "Nenhuma comparação realizada ainda.";
         }
 
         StringBuilder report = new StringBuilder();
-        report.append("RELATã“RIO DE COMPARAã‡ã•ES DE CACHE\n");
+        report.append("RELATÓRIO DE COMPARAÇÕES DE CACHE\n");
         report.append("=".repeat(50)).append("\n");
-        report.append("Total de comparaã§ãµes: ").append(comparisonHistory.size()).append("\n");
+        report.append("Total de comparações: ").append(comparisonHistory.size()).append("\n");
 
         long identicalCount = comparisonHistory.stream()
                 .mapToLong(result -> result.identical ? 1 : 0)
@@ -292,13 +292,13 @@ public class ContentCache {
                 .mapToLong(result -> result.hasSignificantDifferences() ? 1 : 0)
                 .sum();
 
-        report.append("Conteãºdo idãªntico: ").append(identicalCount).append("/").append(comparisonHistory.size()).append("\n");
-        report.append("Diferenã§as significativas: ").append(significantDifferencesCount).append("/").append(comparisonHistory.size()).append("\n");
+        report.append("Conteúdo idêntico: ").append(identicalCount).append("/").append(comparisonHistory.size()).append("\n");
+        report.append("Diferenças significativas: ").append(significantDifferencesCount).append("/").append(comparisonHistory.size()).append("\n");
 
         double accuracy = (double) identicalCount / comparisonHistory.size() * 100;
-        report.append("Precisã£o do cache: ").append(String.format("%.1f%%", accuracy)).append("\n");
+        report.append("Precisão do cache: ").append(String.format("%.1f%%", accuracy)).append("\n");
 
-        report.append("\nãšltimas comparaã§ãµes:\n");
+        report.append("\núltimas comparações:\n");
         report.append("-".repeat(30)).append("\n");
 
         for (int i = comparisonHistory.size() - 1; i >= Math.max(0, comparisonHistory.size() - 5); i--) {
@@ -313,7 +313,7 @@ public class ContentCache {
     }
 
     /**
-     * Classe para estatã­sticas do cache
+     * Classe para estatísticas do cache
      */
     public static class CacheStats {
         private final int currentSize;
