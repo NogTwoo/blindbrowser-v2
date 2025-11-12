@@ -7,8 +7,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Sumarizador baseado em Stanford CoreNLP - VERSãƒO CORRIGIDA
- * Configuraã§ã£o simplificada que funciona sem modelos especã­ficos
+ * Sumarizador baseado em Stanford CoreNLP - VERSão CORRIGIDA
+ * Configuração simplificada que funciona sem modelos específicos
  */
 public class StanfordCoreNLPSummarizer implements INLPSummarizer {
 
@@ -16,23 +16,23 @@ public class StanfordCoreNLPSummarizer implements INLPSummarizer {
     private boolean initialized = false;
     private final Object initLock = new Object();
 
-    // Evita tentativas repetidas apã³s falha permanente
+    // Evita tentativas repetidas após falha permanente
     private static volatile boolean permanentlyDisabled = false;
 
     /**
-     * Configuraã§ã£o BãSICA que funciona sem modelos especã­ficos de portuguãªs
+     * Configuração BÁSICA que funciona sem modelos específicos de portuguãªs
      */
     private Properties createPipelineProperties() {
         Properties props = new Properties();
 
-        // REMOVE configuraã§ãµes problemã¡ticas de portuguãªs:
-        // - NãƒO usar "tokenize.language=Portuguese"
-        // - NãƒO usar modelos especã­ficos que podem nã£o existir
+        // REMOVE configuraçãµes problemáticas de portuguãªs:
+        // - Não usar "tokenize.language=Portuguese"
+        // - Não usar modelos específicos que podem não existir
 
-        // Pipeline mã­nimo mas funcional
+        // Pipeline mínimo mas funcional
         props.setProperty("annotators", "tokenize,ssplit");
 
-        // Configuraã§ãµes bã¡sicas
+        // Configuraçãµes básicas
         props.setProperty("threads", "1");
         props.setProperty("outputFormat", "text");
 
@@ -44,27 +44,27 @@ public class StanfordCoreNLPSummarizer implements INLPSummarizer {
         synchronized (initLock) {
             if (initialized || permanentlyDisabled) return;
 
-            System.out.println("ðŸš€ Inicializando Stanford CoreNLP...");
+            System.out.println("Inicializando Stanford CoreNLP...");
             long startTime = System.currentTimeMillis();
 
             try {
-                // Primeira tentativa: configuraã§ã£o bã¡sica
+                // Primeira tentativa: configuração básica
                 Properties props = createPipelineProperties();
                 pipeline = new StanfordCoreNLP(props);
                 initialized = true;
 
                 long initTime = System.currentTimeMillis() - startTime;
-                System.out.printf("âœ… Stanford CoreNLP inicializado em %d ms\n", initTime);
+                System.out.printf("✅ Stanford CoreNLP inicializado em %d ms\n", initTime);
 
             } catch (Exception e) {
-                System.err.println("âŒ Falha ao inicializar Stanford CoreNLP: " + e.getMessage());
+                System.err.println("❌ Falha ao inicializar Stanford CoreNLP: " + e.getMessage());
 
                 // Se falhar, desabilita permanentemente para evitar logs repetidos
                 permanentlyDisabled = true;
                 pipeline = null;
                 initialized = false;
 
-                System.out.println("âš ï¸ Stanford CoreNLP desabilitado, usando algoritmo extrativo");
+                System.out.println("⚠ Stanford CoreNLP desabilitado, usando algoritmo extrativo");
             }
         }
     }
@@ -83,55 +83,55 @@ public class StanfordCoreNLPSummarizer implements INLPSummarizer {
             String cleanContent = preprocessContent(content);
             if (cleanContent.length() < 100) return cleanContent;
 
-            // Anã¡lise com Stanford CoreNLP (bã¡sica)
+            // Análise com Stanford CoreNLP (básica)
             Annotation document = new Annotation(cleanContent);
             pipeline.annotate(document);
 
-            // Extraã§ã£o de sentenã§as bã¡sica
+            // Extração de sentenças básica
             List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
 
             if (sentences == null || sentences.isEmpty()) {
                 return fallbackSummarize(content, maxSentences);
             }
 
-            // ðŸ”§ CORREã‡ãƒO CRãTICA: Calcular limite baseado no tamanho do conteãºdo
+            // ðŸ”§ CORREÇão CRÍTICA: Calcular limite baseado no tamanho do conteãºdo
             int targetSentenceCount = calculateAdaptiveSentenceCount(content.length(), maxSentences);
             int limit = Math.min(targetSentenceCount, sentences.size());
 
-            System.out.printf("ðŸŽ¯ Stanford CoreNLP: %d sentenã§as disponã­veis â†’ selecionando %d sentenã§as (maxSentences: %d)\n",
+            System.out.printf("📊 Stanford CoreNLP: %d sentenças disponíveis → selecionando %d sentenças (maxSentences: %d)\n",
                     sentences.size(), limit, maxSentences);
 
-            // âœ… Seleciona sentenã§as baseado no limite calculado
+            // ✅ Seleciona sentenças baseado no limite calculado
             String summary = sentences.stream()
                     .limit(limit)
                     .map(CoreMap::toString)
                     .collect(Collectors.joining(" "));
 
             long processingTime = System.currentTimeMillis() - startTime;
-            System.out.printf("ðŸŽ¯ Stanford CoreNLP: %d chars â†’ %d chars em %d ms\n",
+            System.out.printf("📊 Stanford CoreNLP: %d chars → %d chars em %d ms\n",
                     content.length(), summary.length(), processingTime);
 
             return summary;
 
         } catch (Exception e) {
-            System.err.println("âŒ Erro no Stanford CoreNLP: " + e.getMessage());
+            System.err.println("❌ Erro no Stanford CoreNLP: " + e.getMessage());
             return fallbackSummarize(content, maxSentences);
         }
     }
 
     /**
-     * CORRIGIDO: Calcula nãºmero mais conservador de sentenã§as para reduzir compressã£o excessiva
+     * CORRIGIDO: Calcula nãºmero mais conservador de sentenças para reduzir compressão excessiva
      */
     private int calculateAdaptiveSentenceCount(int contentLength, int maxSentences) {
-        // âœ… NãšMEROS EXTREMAMENTE REDUZIDOS para usuã¡rios Braille
+        // ✅ NÚMEROS EXTREMAMENTE REDUZIDOS para usuários Braille
         if (contentLength > 30000) {
-            // Wikipedia: apenas 2-3 sentenã§as para ~600 chars
+            // Wikipedia: apenas 2-3 sentenças para ~600 chars
             return Math.min(3, maxSentences);   // DRASTICAMENTE REDUZIDO
         } else if (contentLength > 5000) {
-            // Brasil Escola: apenas 2-3 sentenã§as para ~600 chars
+            // Brasil Escola: apenas 2-3 sentenças para ~600 chars
             return Math.min(3, maxSentences);   // DRASTICAMENTE REDUZIDO
         } else {
-            // G1: apenas 1-2 sentenã§as para ~400 chars
+            // G1: apenas 1-2 sentenças para ~400 chars
             return Math.min(2, maxSentences);   // DRASTICAMENTE REDUZIDO
         }
     }
@@ -161,7 +161,7 @@ public class StanfordCoreNLPSummarizer implements INLPSummarizer {
 
     @Override
     public double calculateSentenceRelevance(String sentence, String fullContext) {
-        return 0.5; // Valor neutro, pois nã£o temos anã¡lise avanã§ada
+        return 0.5; // Valor neutro, pois não temos análise avançada
     }
 
     @Override
@@ -169,7 +169,7 @@ public class StanfordCoreNLPSummarizer implements INLPSummarizer {
         return new NLPProviderInfo(
                 "Stanford CoreNLP",
                 "4.5.0",
-                "Pipeline bã¡sico (tokenize, ssplit) - sem modelos PT",
+                "Pipeline básico (tokenize, ssplit) - sem modelos PT",
                 false, false, 256_000_000L
         );
     }
@@ -183,7 +183,7 @@ public class StanfordCoreNLPSummarizer implements INLPSummarizer {
     public void cleanup() {
         pipeline = null;
         initialized = false;
-        System.out.println("ðŸ§¹ Stanford CoreNLP cleanup concluã­do");
+        System.out.println("🧹 Stanford CoreNLP cleanup concluído");
     }
 
     // Mã©todos auxiliares

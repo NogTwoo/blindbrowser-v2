@@ -5,49 +5,98 @@
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!--                    IDENTIFICAÇÃO DO PROJETO                      -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
     <groupId>br.usp.eesc</groupId>
-    <artifactId>blindbrowser-v2</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <artifactId>BlindBrowser</artifactId>
+    <version>2.0</version>
     <packaging>jar</packaging>
 
     <name>BlindBrowser</name>
-    <description>Navegador web acessível com arquitetura dual-mode para pessoas com deficiência visual</description>
+    <description>Sistema de Navegação Web Acessível com Dual Mode para usuários brasileiros com deficiência visual</description>
 
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!--                    PROPRIEDADES DO PROJETO                       -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
     <properties>
-        <maven.compiler.source>15</maven.compiler.source>
-        <maven.compiler.target>15</maven.compiler.target>
+        <!-- Versão Java -->
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
+
+        <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <!-- Versões das dependências -->
+        <jsoup.version>1.18.1</jsoup.version>
+        <jserialcomm.version>2.10.4</jserialcomm.version>
+        <stanford.corenlp.version>4.5.0</stanford.corenlp.version>
+        <slf4j.version>2.0.9</slf4j.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>https://repo.maven.apache.org/maven2</url>
-        </repository>
-    </repositories>
-
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!--                         DEPENDÊNCIAS                             -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
     <dependencies>
-        <!-- JSoup para parsing HTML -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- COMUNICAÇÃO SERIAL (jSerialComm)                             -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <dependency>
+            <groupId>com.fazecast</groupId>
+            <artifactId>jSerialComm</artifactId>
+            <version>${jserialcomm.version}</version>
+            <!-- ⚠️ CRÍTICO: NÃO usar <scope>system</scope> -->
+            <!-- ⚠️ CRÍTICO: NÃO usar <systemPath> -->
+            <!-- O Maven Central já inclui bibliotecas nativas (.dll/.so/.dylib) -->
+        </dependency>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- WEB SCRAPING (JSoup)                                         -->
+        <!-- ════════════════════════════════════════════════════════════ -->
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.14.3</version>
+            <version>${jsoup.version}</version>
         </dependency>
 
-        <!-- Stanford CoreNLP -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- NLP - STANFORD CORENLP                                       -->
+        <!-- ════════════════════════════════════════════════════════════ -->
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>
-            <version>4.5.4</version>
+            <version>${stanford.corenlp.version}</version>
         </dependency>
 
-
+        <!-- Modelos de linguagem português (opcional, mas recomendado) -->
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>
-            <version>4.5.4</version>
+            <version>${stanford.corenlp.version}</version>
             <classifier>models</classifier>
         </dependency>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- LOGGING (SLF4J)                                              -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- SLF4J API -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <!-- SLF4J Simple (implementação leve) -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- TTS (SÍNTESE DE VOZ)                                  -->
+        <!-- ════════════════════════════════════════════════════════════ -->
 
         <!-- TTS: FreeTTS -->
         <dependency>
@@ -56,81 +105,206 @@
             <version>1.2.2</version>
         </dependency>
 
-        <!-- jSerialComm para comunicação serial (LOCAL) -->
-        <dependency>
-            <groupId>com.fazecast</groupId>
-            <artifactId>jSerialComm</artifactId>
-            <version>2.9.1</version>
-        </dependency>
 
-        <!-- SLF4J (para evitar warnings do Stanford CoreNLP) -->
+        <!-- ════════════════════════════════════════════════════════════ -->
+        <!-- TESTES (JUnit 5 - Opcional)                                  -->
+        <!-- ════════════════════════════════════════════════════════════ -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.36</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!--                       BUILD CONFIGURATION                        -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
     <build>
+        <!-- Nome final do JAR -->
         <finalName>BlindBrowser-${project.version}</finalName>
 
         <plugins>
-            <!-- Maven Compiler Plugin -->
-            <!-- Maven Shade Plugin - Gera Uber-JAR -->
+            <!-- ════════════════════════════════════════════════════════ -->
+            <!-- MAVEN COMPILER PLUGIN                                    -->
+            <!-- ════════════════════════════════════════════════════════ -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.1</version>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+            <!-- ════════════════════════════════════════════════════════ -->
+            <!-- MAVEN ASSEMBLY PLUGIN (JAR com TODAS dependências)      -->
+            <!-- ════════════════════════════════════════════════════════ -->
+            <!--
+                 Este plugin cria um JAR "fat" (uber-jar) contendo:
+                 - Todas as classes do projeto
+                 - Todas as dependências
+                 - Bibliotecas nativas (.dll/.so/.dylib) do jSerialComm
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <!-- Configuração do MANIFEST.MF -->
+                    <archive>
+                        <manifest>
+                            <!-- Classe principal -->
+                            <mainClass>meuparser.BlindBrowser</mainClass>
+
+                            <!-- Adiciona classpath ao manifest -->
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                        <manifestEntries>
+                            <!-- Metadados do projeto -->
+                            <Implementation-Title>${project.name}</Implementation-Title>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                            <Implementation-Vendor>EESC-USP</Implementation-Vendor>
+                            <Built-By>Nicholas Nogueira de Lima</Built-By>
+                        </manifestEntries>
+                    </archive>
+
+                    <!-- Descriptor que empacota TODAS as dependências -->
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
                 <executions>
                     <execution>
+                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>shade</goal>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- ════════════════════════════════════════════════════════ -->
+            <!-- MAVEN JAR PLUGIN (JAR básico - opcional)                -->
+            <!-- ════════════════════════════════════════════════════════ -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>meuparser.BlindBrowser</mainClass>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!-- ════════════════════════════════════════════════════════ -->
+            <!-- MAVEN SUREFIRE PLUGIN (Testes)                          -->
+            <!-- ════════════════════════════════════════════════════════ -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.2</version>
+            </plugin>
+
+            <!-- ════════════════════════════════════════════════════════ -->
+            <!-- MAVEN DEPENDENCY PLUGIN (Análise de dependências)       -->
+            <!-- ════════════════════════════════════════════════════════ -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <!-- Copia dependências para target/libs/ (útil para debug) -->
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <finalName>BlindBrowser-standalone</finalName>
-
-                            <!-- Força inclusão de TODAS dependências (inclusive system-scoped) -->
-                            <artifactSet>
-                                <includes>
-                                    <include>*:*</include>
-                                </includes>
-                            </artifactSet>
-
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>meuparser.BlindBrowser</mainClass>
-                                    <manifestEntries>
-                                        <Implementation-Title>BlindBrowser</Implementation-Title>
-                                        <Implementation-Version>${project.version}</Implementation-Version>
-                                        <Implementation-Vendor>EESC-USP</Implementation-Vendor>
-                                    </manifestEntries>
-                                </transformer>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                            </transformers>
-
-                            <filters>
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/*.SF</exclude>
-                                        <exclude>META-INF/*.DSA</exclude>
-                                        <exclude>META-INF/*.RSA</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
+                            <outputDirectory>${project.build.directory}/libs</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- ════════════════════════════════════════════════════════ -->
+            <!-- MAVEN CLEAN PLUGIN                                       -->
+            <!-- ════════════════════════════════════════════════════════ -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>16</source>
-                    <target>16</target>
-                </configuration>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.3.1</version>
             </plugin>
         </plugins>
     </build>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!--                     PERFIS DE BUILD (Opcional)                   -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <profiles>
+        <!-- Perfil para desenvolvimento (sem testes) -->
+        <profile>
+            <id>dev</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+        </profile>
+
+        <!-- Perfil para produção (com todas validações) -->
+        <profile>
+            <id>prod</id>
+            <build>
+                <plugins>
+                    <!-- Validações extras para build de produção -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>3.4.1</version>
+                        <executions>
+                            <execution>
+                                <id>enforce-versions</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireMavenVersion>
+                                            <version>[3.6,)</version>
+                                        </requireMavenVersion>
+                                        <requireJavaVersion>
+                                            <version>[16,)</version>
+                                        </requireJavaVersion>
+                                    </rules>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!--                    REPOSITÓRIOS MAVEN                            -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <repositories>
+        <!-- Maven Central (padrão) -->
+        <repository>
+            <id>central</id>
+            <name>Maven Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+    </repositories>
+
 </project>

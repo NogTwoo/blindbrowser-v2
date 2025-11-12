@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.*;
 
 /**
- * TTSManager CORRIGIDO - Versã£o Final
+ * TTSManager CORRIGIDO - Versão Final
  * @author Nicholas
  */
 public class TTSManager {
@@ -26,14 +26,14 @@ public class TTSManager {
     private boolean useSystemTTS = false;
     private boolean freeTTSFailed = false;
 
-    // NOVO: Configuraã§ãµes de voz
+    // NOVO: Configuraçãµes de voz
     private String selectedVoice = "auto";
     private List<BrazilianVoice> availableVoices;
 
     // NOVO: Controle de pause manual
     private boolean manuallyPaused = false;
 
-    // NOVO: Timeout para verificaã§ãµes
+    // NOVO: Timeout para verificaçãµes
     private static final int COMMAND_TIMEOUT_SECONDS = 3;
 
     /**
@@ -70,22 +70,22 @@ public class TTSManager {
     private void initializeVoicesQuickly() {
         availableVoices = new ArrayList<>();
 
-        availableVoices.add(new BrazilianVoice("default", "Padrã£o do Sistema", "Voz padrã£o do Windows", "F", "basic", "default"));
+        availableVoices.add(new BrazilianVoice("default", "Padrão do Sistema", "Voz padrão do Windows", "F", "basic", "default"));
         availableVoices.add(new BrazilianVoice("helena", "Helena (SAPI)", "Microsoft Helena - SAPI", "F", "sapi", "helena"));
         availableVoices.add(new BrazilianVoice("francisca", "Francisca (Edge)", "Voz feminina brasileira neural", "F", "edge",
                 "edge-tts --voice pt-BR-FranciscaNeural --text"));
-        availableVoices.add(new BrazilianVoice("antonio", "Antã´nio (Edge)", "Voz masculina brasileira neural", "M", "edge",
+        availableVoices.add(new BrazilianVoice("antonio", "Antônio (Edge)", "Voz masculina brasileira neural", "M", "edge",
                 "edge-tts --voice pt-BR-AntonioNeural --text"));
 
-        System.out.println("âœ… " + availableVoices.size() + " vozes brasileiras registradas");
+        System.out.println("✅ " + availableVoices.size() + " vozes brasileiras registradas");
     }
 
     private void initializeTTSSafely() {
         useSystemTTS = true;
         selectedVoice = "default";
 
-        System.out.println("ðŸŽ™ï¸ TTS inicializado com voz padrã£o do sistema");
-        System.out.println("ðŸ’¡ Verificaã§ã£o de Edge TTS serã¡ feita em background");
+        System.out.println("⚙️ TTS inicializado com voz padrão do sistema");
+        System.out.println("🔄 Verificação de Edge TTS será feita em background");
 
         CompletableFuture.runAsync(this::checkEdgeTTSInBackground);
     }
@@ -94,13 +94,13 @@ public class TTSManager {
         try {
             boolean edgeAvailable = isEdgeTTSAvailableWithTimeout();
             if (edgeAvailable) {
-                System.out.println("âœ… Edge TTS detectado em background - vozes neurais disponã­veis");
+                System.out.println("✅ Edge TTS detectado em background - vozes neurais disponíveis");
                 selectedVoice = "francisca";
             } else {
-                System.out.println("âš ï¸ Edge TTS nã£o disponã­vel - usando SAPI/sistema");
+                System.out.println("⚠️ Edge TTS não disponível - usando SAPI/sistema");
             }
         } catch (Exception e) {
-            System.err.println("âš ï¸ Erro na verificaã§ã£o de Edge TTS: " + e.getMessage());
+            System.err.println("⚠️ Erro na verificação de Edge TTS: " + e.getMessage());
         }
     }
 
@@ -140,7 +140,7 @@ public class TTSManager {
     public void narrate(String text) {
         if (text == null || text.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null,
-                    "Nã£o hã¡ texto para narrar",
+                    "Não há texto para narrar",
                     "Aviso",
                     JOptionPane.WARNING_MESSAGE);
             return;
@@ -149,10 +149,10 @@ public class TTSManager {
         // Se estava pausado manualmente, continua de onde parou
         if (manuallyPaused) {
             manuallyPaused = false;
-            System.out.println("â–¶ï¸ Continuando narraã§ã£o...");
+            System.out.println("▶️ Continuando narração...");
         }
 
-        stopNarration(); // Para qualquer narraã§ã£o anterior
+        stopNarration(); // Para qualquer narração anterior
         isNarrating = true;
         isPaused = false;
 
@@ -160,7 +160,7 @@ public class TTSManager {
             try {
                 narrateWithBrazilianVoice(text);
             } catch (Exception e) {
-                System.err.println("âŒ Erro durante narraã§ã£o: " + e.getMessage());
+                System.err.println("❗ Erro durante narração: " + e.getMessage());
                 e.printStackTrace();
             } finally {
                 isNarrating = false;
@@ -175,7 +175,7 @@ public class TTSManager {
         String cleanText = cleanTextForNarration(text);
         BrazilianVoice voice = getVoiceById(selectedVoice);
 
-        System.out.println("ðŸŽµ Narrando com " + voice.name + ": " +
+        System.out.println("🔄 Narrando com " + voice.name + ": " +
                 cleanText.substring(0, Math.min(50, cleanText.length())) + "...");
 
         try {
@@ -184,7 +184,7 @@ public class TTSManager {
                     if (isEdgeTTSAvailableWithTimeout()) {
                         narrateWithEdgeTTSTimeout(cleanText, voice);
                     } else {
-                        System.out.println("ðŸ”„ Edge TTS indisponã­vel, usando SAPI...");
+                        System.out.println("🔄”„ Edge TTS indisponível, usando SAPI...");
                         narrateWithSAPITimeout(cleanText);
                     }
                     break;
@@ -195,9 +195,9 @@ public class TTSManager {
                     narrateWithBasicTTS(cleanText);
                     break;
             }
-            System.out.println("âœ… Narraã§ã£o concluã­da com " + voice.name);
+            System.out.println("✅ Narração concluída com " + voice.name);
         } catch (Exception e) {
-            System.err.println("âŒ Erro com " + voice.name + ", usando fallback bã¡sico");
+            System.err.println("❗ Erro com " + voice.name + ", usando fallback básico");
             try {
                 narrateWithBasicTTS(cleanText);
             } catch (Exception fallbackError) {
@@ -341,13 +341,13 @@ public class TTSManager {
                 if (narrationThread != null && narrationThread.isAlive()) {
                     narrationThread.interrupt();
                 }
-                isNarrating = false; // Para a narraã§ã£o atual
-                System.out.println("â¸ï¸ Narraã§ã£o pausada");
+                isNarrating = false; // Para a narração atual
+                System.out.println("⏹ Narração pausada");
             } else {
-                System.out.println("â–¶ï¸ Para continuar, pressione F4 novamente");
+                System.out.println("▶️ Para continuar, pressione F4 novamente");
             }
         } else {
-            System.out.println("â„¹ï¸ Nenhuma narraã§ã£o ativa para pausar");
+            System.out.println("ℹ️ Nenhuma narração ativa para pausar");
         }
     }
 
@@ -360,17 +360,17 @@ public class TTSManager {
         isPaused = false;
         manuallyPaused = false;
 
-        // Interrompe thread de narraã§ã£o
+        // Interrompe thread de narração
         if (narrationThread != null && narrationThread.isAlive()) {
             narrationThread.interrupt();
             try {
-                narrationThread.join(1000); // Aguarda atã© 1 segundo
+                narrationThread.join(1000); // Aguarda até 1 segundo
             } catch (InterruptedException e) {
                 // Thread interrompida durante join
             }
         }
 
-        // Mata qualquer processo TTS em execuã§ã£o (Windows)
+        // Mata qualquer processo TTS em execução (Windows)
         try {
             if (System.getProperty("os.name").toLowerCase().contains("win")) {
                 // Mata processos PowerShell que podem estar executando TTS
@@ -381,18 +381,18 @@ public class TTSManager {
             // Ignora erros de cleanup
         }
 
-        System.out.println("â¹ï¸ Narraã§ã£o parada completamente");
+        System.out.println("⏹️Narração parada completamente");
     }
 
-    // ========== Mã‰TODOS AUXILIARES ==========
+    // ========== MÉTODOS AUXILIARES ==========
 
     public void selectVoice() {
         BrazilianVoice[] voices = availableVoices.toArray(new BrazilianVoice[0]);
 
         BrazilianVoice selected = (BrazilianVoice) JOptionPane.showInputDialog(
                 null,
-                "Escolha a voz para narraã§ã£o:",
-                "Seleã§ã£o de Voz",
+                "Escolha a voz para narração:",
+                "Seleção de Voz",
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 voices,
@@ -401,7 +401,7 @@ public class TTSManager {
 
         if (selected != null) {
             selectedVoice = selected.id;
-            System.out.println("ðŸŽ™ï¸ Voz alterada para: " + selected.name);
+            System.out.println("🔄⚙️ Voz alterada para: " + selected.name);
 
             JOptionPane.showMessageDialog(null,
                     "Voz alterada para " + selected.name + "\n" +
@@ -411,8 +411,8 @@ public class TTSManager {
 
     public void testCurrentVoice() {
         BrazilianVoice currentVoice = getVoiceById(selectedVoice);
-        String testText = "Olã¡! Esta ã© a voz " + currentVoice.name +
-                " narrando em portuguãªs brasileiro. A qualidade estã¡ boa?";
+        String testText = "Olá! Esta é a voz " + currentVoice.name +
+                " narrando em portuguãªs brasileiro. A qualidade está boa?";
         narrate(testText);
     }
 
@@ -432,7 +432,7 @@ public class TTSManager {
 
     private void showRateMessage() {
         String message = String.format("Velocidade: %.0f palavras/min", speechRate);
-        System.out.println("ðŸŽšï¸ " + message);
+        System.out.println("🔄⚚️ " + message);
 
         SwingUtilities.invokeLater(() -> {
             JDialog dialog = new JDialog();
@@ -478,14 +478,14 @@ public class TTSManager {
 
     private String cleanTextForNarration(String text) {
         return text
-                .replaceAll("â”€+", " ")
-                .replaceAll("â•+", " ")
+                .replaceAll("═+", " ")
+                .replaceAll("─+", " ")
                 .replaceAll("\\[.*?\\]", "")
                 .replaceAll("\\s+", " ")
                 .replaceAll("F\\d+", "")
-                .replace("ðŸ“„", "modo resumido")
-                .replace("ðŸ“–", "modo completo")
-                .replaceAll("[âœ…âŒðŸ”ðŸ”Šâ¸ï¸â–¶ï¸â¹ï¸]", "")
+                .replace("🔄“„", "modo resumido")
+                .replace("🔄“–", "modo completo")
+                .replaceAll("[✅❌🔄” 🔄” ⏸ ▶ ⏹]", "")
                 .trim();
     }
 
@@ -504,7 +504,7 @@ public class TTSManager {
             scrollPane.setPreferredSize(new java.awt.Dimension(500, 400));
 
             JOptionPane.showMessageDialog(null, scrollPane,
-                    "Narraã§ã£o de Texto (TTS nã£o disponã­vel)",
+                    "Narração de Texto (TTS não disponível)",
                     JOptionPane.INFORMATION_MESSAGE);
         });
     }
@@ -524,13 +524,13 @@ public class TTSManager {
         info.append("=== TTS DIAGNOSTIC INFO ===\n");
         info.append("Sistema: ").append(System.getProperty("os.name")).append("\n");
         info.append("Voz atual: ").append(getVoiceById(selectedVoice).name).append("\n");
-        info.append("Mã©todo: ").append(getVoiceById(selectedVoice).method).append("\n");
+        info.append("Método: ").append(getVoiceById(selectedVoice).method).append("\n");
         info.append("Velocidade: ").append(speechRate).append(" palavras/min\n");
         info.append("Narrando: ").append(isNarrating).append("\n");
         info.append("Pausado: ").append(isPaused).append("\n");
         info.append("Pausado manualmente: ").append(manuallyPaused).append("\n");
         info.append("Timeout configurado: ").append(COMMAND_TIMEOUT_SECONDS).append("s\n");
-        info.append("\nVozes disponã­veis:\n");
+        info.append("\nVozes disponíveis:\n");
         for (BrazilianVoice voice : availableVoices) {
             info.append("- ").append(voice.name).append(" (").append(voice.method).append(")\n");
         }

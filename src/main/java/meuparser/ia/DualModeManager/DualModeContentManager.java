@@ -10,7 +10,7 @@ import javax.swing.*;
 
 /**
  * Gerenciador de Conteúdo Dual Mode - Resumido/Completo
- * Permite ao usuã¡rio alternar entre visã£o resumida e completa
+ * Permite ao usuário alternar entre visão resumida e completa
  */
 public class DualModeContentManager {
 
@@ -34,8 +34,8 @@ public class DualModeContentManager {
     private long completeLoadTime;
 
     public enum ContentMode {
-        ESSENTIAL("Modo Resumido", "Leitura otimizada (~10 min)", "ðŸ“„"),
-        COMPLETE("Modo Completo", "Conteúdo integral", "ðŸ“–");
+        ESSENTIAL("Modo Resumido", "Leitura otimizada (~10 min)", "🔄“„"),
+        COMPLETE("Modo Completo", "Conteúdo integral", "🔄“–");
 
         private final String name;
         private final String description;
@@ -65,7 +65,7 @@ public class DualModeContentManager {
     public void loadContent(String url) throws Exception {
         this.currentUrl = url;
 
-        System.out.println("ðŸ”„ Carregando conteúdo de: " + url);
+        System.out.println("🔄 Carregando conteúdo de: " + url);
 
         // 1. Extrai conteúdo com Jsoup
         long startTime = System.currentTimeMillis();
@@ -81,13 +81,13 @@ public class DualModeContentManager {
         // 2. Classifica o conteúdo
         ContentClassifier.ContentCategory category = classifier.classifyContent(originalContent);
 
-        // 3. Gera versã£o resumida
+        // 3. Gera versão resumida
         startTime = System.currentTimeMillis();
         this.essentialContent = summarizer.generateSummaryWithCategory(
                 originalContent, category);
         essentialLoadTime = System.currentTimeMillis() - startTime;
 
-        // 4. Limpa versã£o completa (preservando estrutura)
+        // 4. Limpa versão completa (preservando estrutura)
         this.completeContent = cleanButPreserve(originalContent);
 
         // 5. Inicia no modo ESSENTIAL
@@ -153,7 +153,7 @@ public class DualModeContentManager {
             index += keyword.length();
         }
 
-        // Salva no histã³rico
+        // Salva no histórico
         searchHistory.put(keyword, String.valueOf(matches.size()));
 
         if (matches.isEmpty()) {
@@ -183,10 +183,10 @@ public class DualModeContentManager {
         for (String marker : sectionMarkers) {
             int index = completeContent.indexOf(marker);
             if (index != -1) {
-                // Retorna a seção (até prã³ximo marcador ou 1000 chars)
+                // Retorna a seção (até próximo marcador ou 1000 chars)
                 int endIndex = Math.min(index + 1000, completeContent.length());
 
-                // Procura prã³ximo marcador de seção
+                // Procura próximo marcador de seção
                 String nextSection = completeContent.substring(index + marker.length());
                 int nextMarker = nextSection.indexOf("==");
                 if (nextMarker != -1) {
@@ -197,7 +197,7 @@ public class DualModeContentManager {
             }
         }
 
-        return "Seção '" + sectionName + "' nã£o encontrada";
+        return "Seção '" + sectionName + "' não encontrada";
     }
 
     /**
@@ -350,7 +350,7 @@ public class DualModeContentManager {
         public String toString() {
             StringBuilder sb = new StringBuilder();
             sb.append("\uD83D\uDCCA ESTATÍSTICAS DO CONTEÚDO\n");
-            sb.append("â”€".repeat(40)).append("\n");
+            sb.append("─".repeat(40)).append("\n");
             sb.append(String.format("URL: %s\n", url));
             sb.append(String.format("Modo atual: %s\n", currentMode.name));
             sb.append("\nRESUMIDO:\n");

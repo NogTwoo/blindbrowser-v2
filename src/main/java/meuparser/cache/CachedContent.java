@@ -22,9 +22,9 @@ public class CachedContent {
     }
 
     /**
-     * Cria um novo conteãºdo em cache com TTL customizado
+     * Cria um novo conteúdo em cache com TTL customizado
      *
-     * @param content   O conteãºdo a ser armazenado
+     * @param content   O conteúdo a ser armazenado
      * @param timestamp Timestamp de quando foi criado
      * @param ttlMillis Time to live em milissegundos
      */
@@ -35,7 +35,7 @@ public class CachedContent {
     }
 
     /**
-     * Verifica se o conteãºdo expirou
+     * Verifica se o conteúdo expirou
      *
      * @return true se expirou, false caso contrã¡rio
      */
@@ -45,16 +45,16 @@ public class CachedContent {
 
 
     /**
-     * Obtã©m o conteãºdo armazenado
+     * Obtém o conteúdo armazenado
      *
-     * @return O conteãºdo
+     * @return O conteúdo
      */
     public String getContent() {
         return content;
     }
 
     /**
-     * Obtã©m o timestamp de criaã§ã£o
+     * Obtém o timestamp de criaã§ã£o
      *
      * @return Timestamp em milissegundos
      */
@@ -63,7 +63,7 @@ public class CachedContent {
     }
 
     /**
-     * Obtã©m o TTL configurado
+     * Obtém o TTL configurado
      *
      * @return TTL em milissegundos
      */
@@ -72,7 +72,7 @@ public class CachedContent {
     }
 
     /**
-     * Calcula o tempo restante atã© expirar
+     * Calcula o tempo restante até expirar
      *
      * @return Tempo restante em milissegundos (negativo se jã¡ expirou)
      */

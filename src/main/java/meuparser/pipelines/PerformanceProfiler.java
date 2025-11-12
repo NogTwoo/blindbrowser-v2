@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 
 
 /**
- * Profiler de performance para mediã§ã£o precisa dos tempos de processamento
- * Usado para gerar dados empã­ricos do relatã³rio tã©cnico
- * VERSãƒO ADAPTATIVA - Integrado com sistema de compressã£o inteligente por categoria
+ * Profiler de performance para medição precisa dos tempos de processamento
+ * Usado para gerar dados empíricos do relatório técnico
+ * VERSÃO ADAPTATIVA - Integrado com sistema de compressão inteligente por categoria
  */
 public class PerformanceProfiler {
 
@@ -25,14 +25,14 @@ public class PerformanceProfiler {
         public long sumTime;        // T_sum
         public long formatTime;     // T_fmt
         public long totalTime;      // T_e2e
-        public int originalTokens;  // Tokens do conteãºdo original
+        public int originalTokens;  // Tokens do conteúdo original
         public int summaryTokens;   // Tokens do RESUMO
-        public int finalTokens;     // Tokens do conteãºdo formatado final
+        public int finalTokens;     // Tokens do conteúdo formatado final
         public int noiseRemoved;    // Baseado no resumo
         public double noiseReductionRatio; // RRR baseado no resumo
         public double compressionRatio;    // CR baseado no resumo
         public double expectedCompressionRatio; // CR esperado pela categoria
-        public double compressionEfficiency;   // Eficiãªncia da compressã£o
+        public double compressionEfficiency;   // Eficiência da compressão
         public ContentClassifier.ContentCategory category; // Categoria identificada
         public boolean success;
         public String errorMessage;
@@ -49,7 +49,7 @@ public class PerformanceProfiler {
 
     /**
      * Mede performance completa de processamento de uma URL
-     * ADAPTATIVO: Usa compressã£o inteligente baseada na categoria do conteãºdo
+     * ADAPTATIVO: Usa compressão inteligente baseada na categoria do conteúdo
      */
     public ProcessingMetrics measureProcessing(String url) {
         ProcessingMetrics metrics = new ProcessingMetrics();
@@ -79,7 +79,7 @@ public class PerformanceProfiler {
             originalContent = parser.getTexto();
             metrics.originalTokens = countTokens(originalContent);
 
-            // 2. MEDIR T_class (Classificaã§ã£o)
+            // 2. MEDIR T_class (Classificação)
             startTime = System.nanoTime();
             ContentClassifier classifier = new ContentClassifier();
             category = classifier.classifyContent(originalContent);
@@ -87,32 +87,32 @@ public class PerformanceProfiler {
             endTime = System.nanoTime();
             metrics.classTime = (endTime - startTime) / 1_000_000;
 
-            // 3. MEDIR T_sum (Sumarizaã§ã£o ADAPTATIVA)
+            // 3. MEDIR T_sum (Sumarização ADAPTATIVA)
             startTime = System.nanoTime();
             ContentSummarizer summarizer = new ContentSummarizer();
             summary = summarizer.generateSummaryWithCategory(originalContent, category);
             endTime = System.nanoTime();
             metrics.sumTime = (endTime - startTime) / 1_000_000;
 
-            // 4. MEDIR T_fmt (Formataã§ã£o)
+            // 4. MEDIR T_fmt (Formatação)
             startTime = System.nanoTime();
             SmartFormatter formatter = new SmartFormatter();
             finalContent = formatter.format(originalContent);
             endTime = System.nanoTime();
             metrics.formatTime = (endTime - startTime) / 1_000_000;
 
-            // 5. CALCULAR Mã‰TRICAS ADAPTATIVAS
+            // 5. CALCULAR MÉTRICAS ADAPTATIVAS
             metrics.originalTokens = countTokens(originalContent);
             metrics.summaryTokens = countTokens(summary);
             metrics.finalTokens = countTokens(finalContent);
 
-            // CãLCULO CORRETO - Baseado no resumo:
+            // CÁLCULO CORRETO - Baseado no resumo:
             if (metrics.originalTokens > 0) {
                 metrics.compressionRatio = (double) metrics.summaryTokens / metrics.originalTokens;
                 metrics.noiseReductionRatio = Math.max(0.0, 1.0 - metrics.compressionRatio);
                 metrics.noiseRemoved = metrics.originalTokens - metrics.summaryTokens;
 
-                // Mã©tricas adaptativas
+                // Métricas adaptativas
                 metrics.expectedCompressionRatio = getExpectedCompressionRatio(category);
                 metrics.compressionEfficiency = metrics.compressionRatio / metrics.expectedCompressionRatio;
             } else {
@@ -125,13 +125,13 @@ public class PerformanceProfiler {
 
             // Verifica se hã¡ crescimento anã´malo
             if (metrics.compressionRatio > 1.0) {
-                System.out.printf("âš ï¸ ATENã‡ãƒO: Resumo maior que original! (%.3f) - %s\n",
+                System.out.printf("⚠ ATENÇÃO: Resumo maior que original! (%.3f) - %s\n",
                         metrics.compressionRatio, url);
             }
 
-            // Anã¡lise de eficiãªncia adaptativa
+            // Anã¡lise de eficiência adaptativa
             if (metrics.compressionEfficiency < 0.8 || metrics.compressionEfficiency > 1.2) {
-                System.out.printf("âš ï¸ Eficiãªncia de compressã£o fora do esperado: %.2f para categoria %s\n",
+                System.out.printf("⚠ Eficiência de compressão fora do esperado: %.2f para categoria %s\n",
                         metrics.compressionEfficiency, category.name());
             }
 
@@ -151,47 +151,47 @@ public class PerformanceProfiler {
     }
 
     /**
-     * Executa benchmark adaptativo em mãºltiplas URLs
+     * Executa benchmark adaptativo em múltiplas URLs
      */
     public List<ProcessingMetrics> runBenchmark(String[] urls) {
         List<ProcessingMetrics> results = new ArrayList<>();
 
-        System.out.println("ðŸš€ INICIANDO BENCHMARK ADAPTATIVO DE PERFORMANCE");
-        System.out.println("â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•");
+        System.out.println("🚀INICIANDO BENCHMARK ADAPTATIVO DE PERFORMANCE");
+        System.out.println("===============================================");
 
         for (int i = 0; i < urls.length; i++) {
-            System.out.printf("ðŸ“Š Testando [%d/%d]: %s\n", i+1, urls.length, urls[i]);
+            System.out.printf("📊 Testando [%d/%d]: %s\n", i+1, urls.length, urls[i]);
 
             ProcessingMetrics metrics = measureProcessing(urls[i]);
             results.add(metrics);
 
             if (metrics.success) {
-                System.out.println("âœ… " + metrics.toString());
+                System.out.println("✅ " + metrics.toString());
 
-                // Debug detalhado das mã©tricas adaptativas
-                System.out.printf("   ðŸ“Š Original: %d tokens â†’ Resumo: %d tokens â†’ Final: %d tokens\n",
+                // Debug detalhado das métricas adaptativas
+                System.out.printf("   📊 Original: %d tokens → Resumo: %d tokens → Final: %d tokens\n",
                         metrics.originalTokens, metrics.summaryTokens, metrics.finalTokens);
-                System.out.printf("   ðŸ“ˆ CR: %.3f (esperado: %.3f) | RRR: %.3f | Eficiãªncia: %.2f\n",
+                System.out.printf("   📈 CR: %.3f (esperado: %.3f) | RRR: %.3f | Eficiência: %.2f\n",
                         metrics.compressionRatio, metrics.expectedCompressionRatio,
                         metrics.noiseReductionRatio, metrics.compressionEfficiency);
 
-                // Avaliaã§ã£o qualitativa
+                // Avaliação qualitativa
                 String quality = evaluateCompressionQuality(metrics.compressionEfficiency);
-                System.out.printf("   ðŸŽ¯ Qualidade da compressã£o: %s\n", quality);
+                System.out.printf("   🎯 Qualidade da compressão: %s\n", quality);
             } else {
-                System.out.println("âŒ " + metrics.errorMessage);
+                System.out.println("❌ " + metrics.errorMessage);
             }
             System.out.println();
         }
 
-        // Relatã³rio consolidado
+        // Relatório consolidado
         generateAdaptiveSummary(results);
 
         return results;
     }
 
     /**
-     * Gera relatã³rio consolidado do benchmark adaptativo
+     * Gera relatório consolidado do benchmark adaptativo
      */
     private void generateAdaptiveSummary(List<ProcessingMetrics> results) {
         List<ProcessingMetrics> successful = results.stream()
@@ -199,12 +199,12 @@ public class PerformanceProfiler {
                 .collect(Collectors.toList());
 
         if (successful.isEmpty()) {
-            System.out.println("âŒ Nenhum teste bem-sucedido para gerar relatã³rio");
+            System.out.println("❌ Nenhum teste bem-sucedido para gerar relatório");
             return;
         }
 
-        System.out.println("ðŸ“Š RELATã“RIO CONSOLIDADO - BENCHMARK ADAPTATIVO");
-        System.out.println("â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•");
+        System.out.println("📊 RELATÓRIO CONSOLIDADO - BENCHMARK ADAPTATIVO");
+        System.out.println("===============================================");
 
         // Agrupa por categoria
         Map<ContentClassifier.ContentCategory, List<ProcessingMetrics>> byCategory =
@@ -228,13 +228,13 @@ public class PerformanceProfiler {
                     .mapToDouble(m -> m.noiseReductionRatio)
                     .average().orElse(0.0);
 
-            System.out.printf("ðŸ“‚ %s (%d amostras):\n", category.name(), categoryResults.size());
-            System.out.printf("   - Compressã£o mã©dia: %.3f (%.1f%% reduã§ã£o)\n", avgCompression, avgReduction * 100);
-            System.out.printf("   - Eficiãªncia mã©dia: %.2f\n", avgEfficiency);
+            System.out.printf("📁 %s (%d amostras):\n", category.name(), categoryResults.size());
+            System.out.printf("   - Compressão média: %.3f (%.1f%% redução)\n", avgCompression, avgReduction * 100);
+            System.out.printf("   - Eficiência média: %.2f\n", avgEfficiency);
             System.out.println();
         }
 
-        // Mã©tricas gerais
+        // Métricas gerais
         double overallAvgReduction = successful.stream()
                 .mapToDouble(m -> m.noiseReductionRatio)
                 .average().orElse(0.0);
@@ -243,70 +243,70 @@ public class PerformanceProfiler {
                 .mapToDouble(m -> m.compressionEfficiency)
                 .average().orElse(0.0);
 
-        System.out.printf("ðŸŽ¯ Mã‰TRICAS GERAIS:\n");
-        System.out.printf("   - Reduã§ã£o mã©dia geral: %.1f%%\n", overallAvgReduction * 100);
-        System.out.printf("   - Eficiãªncia mã©dia geral: %.2f\n", overallAvgEfficiency);
+        System.out.printf("🎯 MÉTRICAS GERAIS:\n");
+        System.out.printf("   - Redução média geral: %.1f%%\n", overallAvgReduction * 100);
+        System.out.printf("   - Eficiência média geral: %.2f\n", overallAvgEfficiency);
         System.out.printf("   - Taxa de sucesso: %.1f%% (%d/%d)\n",
                 (double) successful.size() / results.size() * 100, successful.size(), results.size());
     }
 
     /**
-     * Avalia qualitativamente a eficiãªncia da compressã£o
+     * Avalia qualitativamente a eficiência da compressão
      */
     private String evaluateCompressionQuality(double efficiency) {
         if (efficiency >= 0.9 && efficiency <= 1.1) {
-            return "ðŸŽ¯ EXCELENTE (dentro do esperado)";
+            return "🎯 EXCELENTE (dentro do esperado)";
         } else if (efficiency >= 0.8 && efficiency <= 1.2) {
-            return "âœ… BOM (prã³ximo ao esperado)";
+            return "✅ BOM (próximo ao esperado)";
         } else if (efficiency >= 0.7 && efficiency <= 1.3) {
-            return "âš ï¸ ACEITãVEL (ligeiramente fora do esperado)";
+            return "⚠ ACEITÁVEL (ligeiramente fora do esperado)";
         } else {
-            return "âŒ PROBLEMãTICO (muito fora do esperado)";
+            return "❌ PROBLEMÁTICO (muito fora do esperado)";
         }
     }
 
     /**
-     * Obtã©m ratio de compressã£o esperado para uma categoria
+     * Obtém ratio de compressão esperado para uma categoria
      */
     private double getExpectedCompressionRatio(ContentClassifier.ContentCategory category) {
         // Espelha os ratios do ContentSummarizer
         switch (category) {
-            case NEWS: return 0.55;           // 45% reduã§ã£o
-            case ARTICLE: return 0.65;        // 35% reduã§ã£o
-            case EDUCATIONAL: return 0.70;    // 30% reduã§ã£o
-            case E_COMMERCE: return 0.80;     // 20% reduã§ã£o
-            case FORM: return 0.90;           // 10% reduã§ã£o
-            case BLOG: return 0.60;           // 40% reduã§ã£o
-            case NAVIGATION: return 0.50;     // 50% reduã§ã£o
-            default: return 0.60;             // 40% reduã§ã£o
+            case NEWS: return 0.55;           // 45% redução
+            case ARTICLE: return 0.65;        // 35% redução
+            case EDUCATIONAL: return 0.70;    // 30% redução
+            case E_COMMERCE: return 0.80;     // 20% redução
+            case FORM: return 0.90;           // 10% redução
+            case BLOG: return 0.60;           // 40% redução
+            case NAVIGATION: return 0.50;     // 50% redução
+            default: return 0.60;             // 40% redução
         }
     }
 
     /**
-     * Mã©todo de debug adaptativo
+     * Método de debug adaptativo
      */
     public static void debugTokenCountAdaptive() {
-        System.out.println("ðŸ” DEBUG: Sistema Adaptativo de Contagem de Tokens");
-        System.out.println("â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•");
+        System.out.println("⚙ DEBUG: Sistema Adaptativo de Contagem de Tokens");
+        System.out.println("================================================");
 
-        // Testa diferentes tipos de conteãºdo
+        // Testa diferentes tipos de conteúdo
         Map<ContentClassifier.ContentCategory, String> testContents = new HashMap<>();
 
         testContents.put(ContentClassifier.ContentCategory.NEWS,
-                "BRASãLIA - O Governo Federal anunciou hoje novas medidas econã´micas que devem impactar " +
-                        "diretamente a vida dos brasileiros. Segundo o Ministã©rio da Economia, as mudanã§as entram " +
-                        "em vigor a partir do prã³ximo mãªs. A decisã£o foi tomada apã³s reuniã£o com especialistas " +
-                        "que apontaram a necessidade de ajustes na polã­tica fiscal. O ministro declarou que " +
-                        "as medidas sã£o essenciais para o controle da inflaã§ã£o. Os dados mostram crescimento " +
-                        "de 3.2% no PIB do ãºltimo trimestre, resultado considerado positivo pelos analistas.");
+                "BRASÍLIA - O Governo Federal anunciou hoje novas medidas econã´micas que devem impactar " +
+                        "diretamente a vida dos brasileiros. Segundo o Ministério da Economia, as mudanças entram " +
+                        "em vigor a partir do próximo mês. A decisão foi tomada após reunião com especialistas " +
+                        "que apontaram a necessidade de ajustes na política fiscal. O ministro declarou que " +
+                        "as medidas são essenciais para o controle da inflação. Os dados mostram crescimento " +
+                        "de 3.2% no PIB do último trimestre, resultado considerado positivo pelos analistas.");
 
         testContents.put(ContentClassifier.ContentCategory.E_COMMERCE,
-                "Smartphone Premium XYZ - Especificaã§ãµes tã©cnicas: Tela OLED de 6.8 polegadas, " +
-                        "processador octa-core de ãºltima geraã§ã£o, 256GB de armazenamento interno. Preã§o promocional " +
-                        "por tempo limitado: R$ 2.499,00 em atã© 12x sem juros. Cã¢mera tripla de 108MP com " +
-                        "estabilizaã§ã£o ã³ptica. Bateria de 5000mAh com carregamento rã¡pido. Produto com " +
-                        "garantia de 2 anos e frete grã¡tis para todo o Brasil. Disponã­vel nas cores preto, " +
-                        "azul e dourado. Avaliaã§ã£o dos clientes: 4.8 estrelas de 5.");
+                "Smartphone Premium XYZ - Especificaçãµes técnicas: Tela OLED de 6.8 polegadas, " +
+                        "processador octa-core de última geração, 256GB de armazenamento interno. Preço promocional " +
+                        "por tempo limitado: R$ 2.499,00 em até 12x sem juros. Cã¢mera tripla de 108MP com " +
+                        "estabilização óptica. Bateria de 5000mAh com carregamento rã¡pido. Produto com " +
+                        "garantia de 2 anos e frete grã¡tis para todo o Brasil. Disponível nas cores preto, " +
+                        "azul e dourado. Avaliação dos clientes: 4.8 estrelas de 5.");
 
         ContentSummarizer summarizer = new ContentSummarizer();
 
@@ -322,10 +322,10 @@ public class PerformanceProfiler {
             double compressionRatio = (double) summaryTokens / originalTokens;
             double reductionRatio = 1.0 - compressionRatio;
 
-            System.out.printf("ðŸ“‚ CATEGORIA: %s\n", category.name());
+            System.out.printf("📁 CATEGORIA: %s\n", category.name());
             System.out.printf("   Original: %d tokens\n", originalTokens);
             System.out.printf("   Resumo: %d tokens\n", summaryTokens);
-            System.out.printf("   Compressã£o: %.3f | Reduã§ã£o: %.1f%%\n", compressionRatio, reductionRatio * 100);
+            System.out.printf("   Compressão: %.3f | Redução: %.1f%%\n", compressionRatio, reductionRatio * 100);
             System.out.println();
         }
 
@@ -352,7 +352,7 @@ public class PerformanceProfiler {
             if (domain.contains("g1")) return "G1";
             if (domain.contains("uol")) return "UOL";
             if (domain.contains("brasilescola")) return "Brasil Escola";
-            if (domain.contains("mundoeducacao")) return "Mundo Educaã§ã£o";
+            if (domain.contains("mundoeducacao")) return "Mundo Educação";
             if (domain.contains("canaltech")) return "Canaltech";
             if (domain.contains("olhardigital")) return "Olhar Digital";
             if (domain.contains("gov.br")) return "Governo";
@@ -377,9 +377,9 @@ public class PerformanceProfiler {
  import java.util.ArrayList;
 
  /**
- * Profiler de performance para mediã§ã£o precisa dos tempos de processamento
- * Usado para gerar dados empã­ricos do relatã³rio tã©cnico
- * VERSãƒO CORRIGIDA - Calcula mã©tricas baseadas no RESUMO, nã£o no formato final
+ * Profiler de performance para medição precisa dos tempos de processamento
+ * Usado para gerar dados empíricos do relatório técnico
+ * VERSÃO CORRIGIDA - Calcula métricas baseadas no RESUMO, não no formato final
  */
 /**public class PerformanceProfiler {
 
@@ -391,9 +391,9 @@ public class PerformanceProfiler {
  public long sumTime;        // T_sum
  public long formatTime;     // T_fmt
  public long totalTime;      // T_e2e
- public int originalTokens;  // Tokens do conteãºdo original
+ public int originalTokens;  // Tokens do conteúdo original
  public int summaryTokens;   // Tokens do RESUMO (novo)
- public int finalTokens;     // Tokens do conteãºdo formatado final
+ public int finalTokens;     // Tokens do conteúdo formatado final
  public int noiseRemoved;    // Baseado no resumo
  public double noiseReductionRatio; // RRR baseado no resumo
  public double compressionRatio;    // CR baseado no resumo
@@ -409,7 +409,7 @@ public class PerformanceProfiler {
 
  /**
   * Mede performance completa de processamento de uma URL
-  * CORRIGIDO: Calcula mã©tricas baseadas no resumo, nã£o no formato final
+  * CORRIGIDO: Calcula métricas baseadas no resumo, não no formato final
  */
 /** public ProcessingMetrics measureProcessing(String url) {
  ProcessingMetrics metrics = new ProcessingMetrics();
@@ -438,40 +438,40 @@ public class PerformanceProfiler {
  originalContent = parser.getTexto();
  metrics.originalTokens = countTokens(originalContent);
 
- // 2. MEDIR T_class (Classificaã§ã£o)
+ // 2. MEDIR T_class (Classificação)
  startTime = System.nanoTime();
  ContentClassifier classifier = new ContentClassifier();
  ContentClassifier.ContentCategory category = classifier.classifyContent(originalContent);
  endTime = System.nanoTime();
  metrics.classTime = (endTime - startTime) / 1_000_000;
 
- // 3. MEDIR T_sum (Sumarizaã§ã£o)
+ // 3. MEDIR T_sum (Sumarização)
  startTime = System.nanoTime();
  ContentSummarizer summarizer = new ContentSummarizer();
- summary = summarizer.generateSummary(originalContent); // âœ…Captura resumo
+ summary = summarizer.generateSummary(originalContent); // ✅Captura resumo
  endTime = System.nanoTime();
  metrics.sumTime = (endTime - startTime) / 1_000_000;
 
- // 4. MEDIR T_fmt (Formataã§ã£o)
+ // 4. MEDIR T_fmt (Formatação)
  startTime = System.nanoTime();
  SmartFormatter formatter = new SmartFormatter();
  finalContent = formatter.format(originalContent);
  endTime = System.nanoTime();
  metrics.formatTime = (endTime - startTime) / 1_000_000;
 
- // 5. CALCULAR Mã‰TRICAS DERIVADAS - VERSãƒO CORRIGIDA
+ // 5. CALCULAR MÉTRICAS DERIVADAS - VERSÃO CORRIGIDA
  // ANTES (problemã¡tico):
- // metrics.finalTokens = countTokens(finalContent); // âŒ Inclui formataã§ã£o
+ // metrics.finalTokens = countTokens(finalContent); // ❌ Inclui formatação
  // DEPOIS (correto):
- metrics.summaryTokens = countTokens(summary);       // âœ… Apenas o resumo
- metrics.finalTokens = countTokens(finalContent);    // Para referãªncia da formataã§ã£o
+ metrics.summaryTokens = countTokens(summary);       // ✅ Apenas o resumo
+ metrics.finalTokens = countTokens(finalContent);    // Para referência da formatação
 
- // Calcular mã©tricas baseadas no RESUMO, nã£o no formato final:
+ // Calcular métricas baseadas no RESUMO, não no formato final:
  metrics.originalTokens = countTokens(originalContent);
  metrics.noiseRemoved = metrics.originalTokens - metrics.summaryTokens;
  metrics.noiseReductionRatio = Math.max(0.0, 1.0 - metrics.compressionRatio);
 
- // Proteã§ã£o contra divisã£o por zero e valores negativos
+ // Proteção contra divisão por zero e valores negativos
  if (metrics.originalTokens > 0) {
  metrics.compressionRatio = (double) metrics.summaryTokens / metrics.originalTokens;
  metrics.noiseReductionRatio = Math.max(0.0, 1.0 - metrics.compressionRatio);
@@ -485,7 +485,7 @@ public class PerformanceProfiler {
 
  /**         // Verifica se hã¡ crescimento anã´malo (para debug)
  if (metrics.compressionRatio > 1.0) {
- System.out.printf("âš ï¸ ATENã‡ãƒO: Resumo maior que original! (%.3f) - %s\n",
+ System.out.printf("âš ï¸ ATENÇÃO: Resumo maior que original! (%.3f) - %s\n",
  metrics.compressionRatio, url);
  }
 
@@ -505,31 +505,31 @@ public class PerformanceProfiler {
  }
 
  /**
- * Executa benchmark em mãºltiplas URLs
+ * Executa benchmark em múltiplas URLs
  */
 /** public List<ProcessingMetrics> runBenchmark(String[] urls) {
  List<ProcessingMetrics> results = new ArrayList<>();
 
- System.out.println("ðŸš€ INICIANDO BENCHMARK DE PERFORMANCE");
- System.out.println("â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•");
+ System.out.println("🚀INICIANDO BENCHMARK DE PERFORMANCE");
+ System.out.println("=======================================");
 
  for (int i = 0; i < urls.length; i++) {
- System.out.printf("ðŸ“Š Testando [%d/%d]: %s\n", i+1, urls.length, urls[i]);
+ System.out.printf("📊 Testando [%d/%d]: %s\n", i+1, urls.length, urls[i]);
 
  ProcessingMetrics metrics = measureProcessing(urls[i]);
  results.add(metrics);
 
  if (metrics.success) {
- System.out.println("âœ… " + metrics.toString());
+ System.out.println("✅ " + metrics.toString());
 
- // Debug adicional das mã©tricas
- System.out.printf("   ðŸ“Š Original: %d tokens â†’ Resumo: %d tokens â†’ Final: %d tokens\n",
+ // Debug adicional das métricas
+ System.out.printf("   📊 Original: %d tokens → Resumo: %d tokens → Final: %d tokens\n",
  metrics.originalTokens, metrics.summaryTokens, metrics.finalTokens);
- System.out.printf("   ðŸ“ˆ CR: %.3f | RRR: %.3f (%.1f%% reduã§ã£o)\n",
+ System.out.printf("   📈 CR: %.3f | RRR: %.3f (%.1f%% redução)\n",
  metrics.compressionRatio, metrics.noiseReductionRatio,
  metrics.noiseReductionRatio * 100);
  } else {
- System.out.println("âŒ " + metrics.errorMessage);
+ System.out.println("❌ " + metrics.errorMessage);
  }
  System.out.println();
  }
@@ -538,12 +538,12 @@ public class PerformanceProfiler {
  }
 
  /**
- * Conta tokens de forma consistente, removendo espaã§os mãºltiplos
+ * Conta tokens de forma consistente, removendo espaços múltiplos
  */
 /**  private int countTokens(String content) {
  if (content == null || content.trim().isEmpty()) return 0;
 
- // Normaliza espaã§os antes de contar
+ // Normaliza espaços antes de contar
  String normalizedContent = content.trim().replaceAll("\\s+", " ");
  return normalizedContent.split("\\s+").length;
  }
@@ -555,7 +555,7 @@ public class PerformanceProfiler {
  if (domain.contains("g1")) return "G1";
  if (domain.contains("uol")) return "UOL";
  if (domain.contains("brasilescola")) return "Brasil Escola";
- if (domain.contains("mundoeducacao")) return "Mundo Educaã§ã£o";
+ if (domain.contains("mundoeducacao")) return "Mundo Educação";
  if (domain.contains("canaltech")) return "Canaltech";
  if (domain.contains("olhardigital")) return "Olhar Digital";
  if (domain.contains("gov.br")) return "Governo";

@@ -173,7 +173,7 @@ public class TestDataExporter {
             writer.println("</head>");
             writer.println("<body>");
 
-            writer.println("<h1>ðŸŽ¯ BlindBrowser - Relatã³rio de Performance</h1>");
+            writer.println("<h1>🎯 BlindBrowser - Relatã³rio de Performance</h1>");
             writer.println("<p><strong>Data do teste:</strong> " + new Date() + "</p>");
 
             // Resumo executivo

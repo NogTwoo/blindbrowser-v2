@@ -5,23 +5,23 @@ import java.lang.reflect.Constructor;
 /**
  * Factory para diferentes provedores de NLP
  * Permite alternar entre Stanford CoreNLP, OpenNLP, DL4J, etc.
- * USA APENAS REFLEXãƒO - NãƒO QUEBRA COMPILAã‡ãƒO
+ * USA APENAS REFLEXãO - NãO QUEBRA COMPILAçãO
  */
 public class NLPProviderFactory {
 
     public enum NLPProvider {
-        STANFORD_CORENLP,    // Mais robusto, melhor para anã¡lise sintã¡tica
+        STANFORD_CORENLP,    // Mais robusto, melhor para análise sintática
         APACHE_OPENNLP,      // Mais leve, boa performance
         DL4J_NEURAL,         // Deep Learning, melhor para tarefas complexas
         HUGGINGFACE_TRANSFORMERS, // Estado da arte, BERT/GPT
-        HYBRID              // Combina mãºltiplos provedores
+        HYBRID              // Combina múltiplos provedores
     }
 
     private static NLPProvider currentProvider = NLPProvider.STANFORD_CORENLP;
 
     /**
-     * Cria instã¢ncia do sumarizador baseado no provedor configurado
-     * USA APENAS REFLEXãƒO PARA EVITAR ERROS DE COMPILAã‡ãƒO
+     * Cria instância do sumarizador baseado no provedor configurado
+     * USA APENAS REFLEXãO PARA EVITAR ERROS DE COMPILAçãO
      */
     public static INLPSummarizer createSummarizer() {
         try {
@@ -36,7 +36,7 @@ public class NLPProviderFactory {
 
             // Fallback: tenta Stanford CoreNLP
             if (currentProvider != NLPProvider.STANFORD_CORENLP) {
-                System.err.println("âš ï¸  Provedor " + currentProvider + " nã£o disponã­vel, tentando Stanford CoreNLP...");
+                System.err.println("⚠️  Provedor " + currentProvider + " não disponível, tentando Stanford CoreNLP...");
                 INLPSummarizer fallback = createSummarizerByReflection(
                         "meuparser.ia.nlp.StanfordCoreNLPSummarizer");
                 if (fallback != null) {
@@ -44,18 +44,18 @@ public class NLPProviderFactory {
                 }
             }
 
-            // ãšltimo recurso: retorna null para usar fallback bã¡sico
-            System.err.println("âŒ Nenhum provedor NLP avanã§ado disponã­vel, usando fallback bã¡sico");
+            // último recurso: retorna null para usar fallback básico
+            System.err.println("❌ Nenhum provedor NLP avançado disponível, usando fallback básico");
             return null;
 
         } catch (Exception e) {
-            System.err.println("âŒ Erro ao criar sumarizador NLP: " + e.getMessage());
+            System.err.println("❌ Erro ao criar sumarizador NLP: " + e.getMessage());
             return null;
         }
     }
 
     /**
-     * Cria sumarizador usando APENAS reflexã£o (nã£o quebra compilaã§ã£o)
+     * Cria sumarizador usando APENAS reflexão (não quebra compilação)
      */
     private static INLPSummarizer createSummarizerByReflection(String className) {
         try {
@@ -63,21 +63,21 @@ public class NLPProviderFactory {
 
             // Verifica se implementa INLPSummarizer
             if (!INLPSummarizer.class.isAssignableFrom(clazz)) {
-                System.err.println("âŒ Classe " + className + " nã£o implementa INLPSummarizer");
+                System.err.println("❌ Classe " + className + " não implementa INLPSummarizer");
                 return null;
             }
 
             Constructor<?> constructor = clazz.getDeclaredConstructor();
             Object instance = constructor.newInstance();
 
-            System.out.println("âœ… Sumarizador criado via reflexã£o: " + className);
+            System.out.println("✅ Sumarizador criado via reflexão: " + className);
             return (INLPSummarizer) instance;
 
         } catch (ClassNotFoundException e) {
-            System.out.println("âš ï¸  Classe nã£o encontrada: " + className);
+            System.out.println("⚠️  Classe não encontrada: " + className);
             return null;
         } catch (Exception e) {
-            System.err.println("âŒ Erro ao instanciar " + className + ": " + e.getMessage());
+            System.err.println("❌ Erro ao instanciar " + className + ": " + e.getMessage());
             return null;
         }
     }
@@ -103,7 +103,7 @@ public class NLPProviderFactory {
     }
 
     /**
-     * Verifica se uma classe estã¡ disponã­vel no classpath
+     * Verifica se uma classe está disponível no classpath
      */
     private static boolean isClassAvailable(String className) {
         try {
@@ -118,7 +118,7 @@ public class NLPProviderFactory {
      * Configura o provedor de NLP a ser usado
      */
     public static void setProvider(NLPProvider provider) {
-        System.out.println("ðŸ”„ Alterando provedor NLP para: " + provider);
+        System.out.println("📄 Alterando provedor NLP para: " + provider);
         currentProvider = provider;
     }
 
@@ -130,7 +130,7 @@ public class NLPProviderFactory {
     }
 
     /**
-     * Lista provedores disponã­veis no sistema atual
+     * Lista provedores disponíveis no sistema atual
      */
     public static NLPProvider[] getAvailableProviders() {
         java.util.List<NLPProvider> available = new java.util.ArrayList<>();
@@ -146,18 +146,18 @@ public class NLPProviderFactory {
     }
 
     /**
-     * Detecta automaticamente o melhor provedor baseado no hardware disponã­vel
-     * E que esteja EFETIVAMENTE disponã­vel
+     * Detecta automaticamente o melhor provedor baseado no hardware disponível
+     * E que esteja EFETIVAMENTE disponível
      */
     public static NLPProvider detectBestProvider() {
         NLPProvider[] available = getAvailableProviders();
 
         if (available.length == 0) {
-            System.err.println("âŒ Nenhum provedor NLP disponã­vel! Usando Stanford CoreNLP como padrã£o");
+            System.err.println("❌ Nenhum provedor NLP disponível! Usando Stanford CoreNLP como padrão");
             return NLPProvider.STANFORD_CORENLP;
         }
 
-        // Prioriza baseado no que estã¡ disponã­vel
+        // Prioriza baseado no que está disponível
         NLPProvider[] priorities = {
                 NLPProvider.STANFORD_CORENLP,  // Mova Stanford para primeiro
                 NLPProvider.HUGGINGFACE_TRANSFORMERS,
@@ -168,18 +168,18 @@ public class NLPProviderFactory {
 
         for (NLPProvider preferred : priorities) {
             if (java.util.Arrays.asList(available).contains(preferred)) {
-                System.out.println("âœ… Usando provedor disponã­vel: " + preferred);
+                System.out.println("✅ Usando provedor disponível: " + preferred);
                 return preferred;
             }
         }
 
-        // Retorna o primeiro disponã­vel se nada mais funcionar
-        System.out.println("âœ… Usando primeiro provedor disponã­vel: " + available[0]);
+        // Retorna o primeiro disponível se nada mais funcionar
+        System.out.println("✅ Usando primeiro provedor disponível: " + available[0]);
         return available[0];
     }
 
     /**
-     * Inicializaã§ã£o automã¡tica baseada no ambiente
+     * Inicialização automática baseada no ambiente
      */
     static {
         try {
@@ -192,19 +192,19 @@ public class NLPProviderFactory {
                     if (java.util.Arrays.asList(availableProviders).contains(provider)) {
                         setProvider(provider);
                     } else {
-                        System.err.println("âš ï¸  Provedor configurado nã£o disponã­vel: " + configuredProvider);
+                        System.err.println("⚠️  Provedor configurado não disponível: " + configuredProvider);
                         setProvider(detectBestProvider());
                     }
                 } catch (IllegalArgumentException e) {
-                    System.err.println("âš ï¸  Provedor NLP invã¡lido: " + configuredProvider);
+                    System.err.println("⚠️  Provedor NLP inválido: " + configuredProvider);
                     setProvider(detectBestProvider());
                 }
             } else {
-                // Auto-detecã§ã£o
+                // Auto-detecção
                 setProvider(detectBestProvider());
             }
         } catch (Exception e) {
-            System.err.println("âŒ Erro na inicializaã§ã£o do NLPProviderFactory: " + e.getMessage());
+            System.err.println("❌ Erro na inicialização do NLPProviderFactory: " + e.getMessage());
             currentProvider = NLPProvider.STANFORD_CORENLP;
         }
     }

@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Arrays;
 
 /**
- * Ferramenta para comparar conteãºdo do cache com conteãºdo extraã­do diretamente
+ * Ferramenta para comparar conteúdo do cache com conteúdo extraído diretamente
  */
 
 public class ContentComparator {
@@ -13,11 +13,11 @@ public class ContentComparator {
     static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
-     * Compara dois conteãºdos e gera um relatã³rio de comparaã§ã£o
+     * Compara dois conteúdos e gera um relatório de comparação
      * @param url URL que foi processada
-     * @param freshContent Conteãºdo extraã­do diretamente do site
-     * @param cachedContent Conteãºdo obtido do cache
-     * @return Relatã³rio de comparaã§ã£o
+     * @param freshContent Conteúdo extraído diretamente do site
+     * @param cachedContent Conteúdo obtido do cache
+     * @return Relatório de comparação
      */
     public static ComparisonResult compare(String url, String freshContent, String cachedContent) {
         if (freshContent == null) freshContent = "";
@@ -38,23 +38,23 @@ public class ContentComparator {
     }
 
     /**
-     * Calcula diferenã§as bã¡sicas entre dois textos
+     * Calcula diferenças básicas entre dois textos
      */
     private static String calculateDifferences(String text1, String text2) {
         StringBuilder diff = new StringBuilder();
 
-        // Comparaã§ã£o de tamanho
+        // Comparação de tamanho
         int sizeDiff = text1.length() - text2.length();
-        diff.append("Diferenã§a de tamanho: ").append(sizeDiff).append(" caracteres\n");
+        diff.append("Diferença de tamanho: ").append(sizeDiff).append(" caracteres\n");
 
-        // Comparaã§ã£o de linhas
+        // Comparação de linhas
         String[] lines1 = text1.split("\n");
         String[] lines2 = text2.split("\n");
 
-        diff.append("Linhas no conteãºdo original: ").append(lines1.length).append("\n");
-        diff.append("Linhas no conteãºdo em cache: ").append(lines2.length).append("\n");
+        diff.append("Linhas no conteúdo original: ").append(lines1.length).append("\n");
+        diff.append("Linhas no conteúdo em cache: ").append(lines2.length).append("\n");
 
-        // Verificar se comeã§am igual
+        // Verificar se começam igual
         int maxLines = Math.min(lines1.length, lines2.length);
         int equalLinesFromStart = 0;
 
@@ -66,7 +66,7 @@ public class ContentComparator {
             }
         }
 
-        diff.append("Linhas iguais do inã­cio: ").append(equalLinesFromStart).append("/").append(maxLines).append("\n");
+        diff.append("Linhas iguais do início: ").append(equalLinesFromStart).append("/").append(maxLines).append("\n");
 
         // Calcular similaridade percentual simples
         double similarity = calculateSimilarity(text1, text2);
@@ -96,22 +96,22 @@ public class ContentComparator {
     }
 
     /**
-     * Gera um log de comparaã§ã£o formatado
+     * Gera um log de comparação formatado
      */
     public static String generateComparisonLog(ComparisonResult result) {
         StringBuilder log = new StringBuilder();
 
         log.append("\n").append("=".repeat(80)).append("\n");
-        log.append("COMPARAã‡ãƒO CACHE vs SITE DIRETO\n");
+        log.append("COMPARAÇÃO CACHE vs SITE DIRETO\n");
         log.append("=".repeat(80)).append("\n");
         log.append("URL: ").append(result.url).append("\n");
         log.append("Timestamp: ").append(DATE_FORMAT.format(result.timestamp)).append("\n");
-        log.append("Conteãºdo Idãªntico: ").append(result.identical ? "SIM" : "NãƒO").append("\n");
-        log.append("Tamanho Conteãºdo Direto: ").append(result.freshContentLength).append(" caracteres\n");
-        log.append("Tamanho Conteãºdo Cache: ").append(result.cachedContentLength).append(" caracteres\n");
+        log.append("Conteúdo Idêntico: ").append(result.identical ? "SIM" : "NÃO").append("\n");
+        log.append("Tamanho Conteúdo Direto: ").append(result.freshContentLength).append(" caracteres\n");
+        log.append("Tamanho Conteúdo Cache: ").append(result.cachedContentLength).append(" caracteres\n");
 
         if (!result.identical && result.differences != null) {
-            log.append("\nDETALHES DAS DIFERENã‡AS:\n");
+            log.append("\nDETALHES DAS DIFERENÇAS:\n");
             log.append("-".repeat(40)).append("\n");
             log.append(result.differences).append("\n");
         }
@@ -122,7 +122,7 @@ public class ContentComparator {
     }
 
     /**
-     * Classe para armazenar resultado da comparaã§ã£o
+     * Classe para armazenar resultado da comparação
      */
     public static class ComparisonResult {
         public String url;
@@ -135,7 +135,7 @@ public class ContentComparator {
         public boolean hasSignificantDifferences() {
             if (identical) return false;
 
-            // Considera significativo se a diferenã§a de tamanho for maior que 5%
+            // Considera significativo se a diferença de tamanho for maior que 5%
             int sizeDiff = Math.abs(freshContentLength - cachedContentLength);
             double percentDiff = (double) sizeDiff / Math.max(freshContentLength, cachedContentLength);
 

@@ -47,8 +47,8 @@ public class ComprehensiveTestSuite {
      * Executa suite completa de testes
      */
     public void runComprehensiveTests() {
-        System.out.println("ðŸŽ¯ SUITE COMPLETA DE TESTES BLINDBROWSER");
-        System.out.println("â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•");
+        System.out.println("🎯 SUITE COMPLETA DE TESTES BLINDBROWSER");
+        System.out.println("===========================================");
         System.out.println();
 
         // 1. Teste de Performance por Categoria
@@ -91,7 +91,7 @@ public class ComprehensiveTestSuite {
                     categoryMetrics.avgEndToEndTime, categoryMetrics.avgNoiseReduction);
         }
 
-        System.out.println("\n" + "â•".repeat(50));
+        System.out.println("\n" + "=".repeat(50));
     }
 
     /**
@@ -127,7 +127,7 @@ public class ComprehensiveTestSuite {
 
         // Anã¡lise de consistãªncia
         analyzeConsistency(allStressResults, iterations);
-        System.out.println("\n" + "â•".repeat(50));
+        System.out.println("\n" + "=".repeat(50));
     }
 
     /**
@@ -154,7 +154,7 @@ public class ComprehensiveTestSuite {
         long successCount = reliabilityResults.stream().mapToLong(m -> m.success ? 1 : 0).sum();
         double robustnessRate = (double) successCount / reliabilityResults.size();
 
-        System.out.printf("ðŸŽ¯ Taxa de robustez: %.1f%% (%d/%d sucessos)\n",
+        System.out.printf("🎯 Taxa de robustez: %.1f%% (%d/%d sucessos)\n",
                 robustnessRate * 100, (int)successCount, reliabilityResults.size());
 
         // Lista erros encontrados
@@ -163,7 +163,7 @@ public class ComprehensiveTestSuite {
                 .filter(m -> !m.success)
                 .forEach(m -> System.out.printf("âŒ %s: %s\n", m.url, m.errorMessage));
 
-        System.out.println("\n" + "â•".repeat(50));
+        System.out.println("\n" + "=".repeat(50));
     }
 
     /**
@@ -194,7 +194,7 @@ public class ComprehensiveTestSuite {
         collector.generateEnhancedReport(finalMetrics, finalResults);
 
         System.out.println("\nðŸŽ‰ TESTE COMPLETO FINALIZADO!");
-        System.out.println("â•".repeat(50));
+        System.out.println("=".repeat(50));
         System.out.println("ðŸ“Š RESUMO EXECUTIVO:");
         System.out.printf("- Total de URLs testadas: %d\n", finalResults.size());
         System.out.printf("- Taxa de sucesso geral: %.1f%%\n", finalMetrics.successRate * 100);
